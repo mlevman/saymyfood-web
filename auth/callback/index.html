@@ -9,12 +9,19 @@
 <link rel="stylesheet" href="../../site.css">
 <style>
   .authbox{max-width:460px}
+  .authbox .big{display:flex;align-items:center;gap:12px;margin:0 0 6px}
+  .authbox .big svg{flex:0 0 auto}
+  .authbox h1{margin:0}
+  .authbox .who{margin:0 0 18px;font-size:15px;font-weight:600;color:#eef2ee;word-break:break-all}
+  .authbox .next{margin:0 0 22px;font-size:15px;line-height:22px}
   .authbox input[type=password]{width:100%;box-sizing:border-box;padding:12px 14px;margin:0 0 12px;
     font-size:15px;border-radius:10px;border:1px solid #3a4a3d;background:#141a15;color:#eef2ee}
   .authbox input[type=password]:focus{outline:none;border-color:#7fd39a}
   .authbox button.cta{border:0;cursor:pointer;font:inherit;font-weight:600}
   .authbox .err{color:#ff9b8a}
-  .authbox .ok{color:#7fd39a}
+  .authbox .aux{margin-top:26px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08)}
+  .authbox .aux a{font-size:14px}
+  .authbox .tiny{font-size:12px;opacity:.65}
   .authbox [hidden]{display:none}
 </style>
 </head>
@@ -33,8 +40,12 @@
 </nav>
 
 <div class="authbox">
-  <h1 id="title">…</h1>
-  <p id="lede"></p>
+  <div class="big">
+    <svg id="tick" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#7fd39a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" hidden><path d="M20 6L9 17l-5-5"></path></svg>
+    <h1 id="title">…</h1>
+  </div>
+  <p class="who" id="who" hidden></p>
+  <p class="next" id="lede"></p>
 
   <!-- password form, recovery only -->
   <div class="card" id="pwform" hidden>
@@ -45,11 +56,11 @@
     <p class="muted" id="pwhint"></p>
   </div>
 
-  <!-- open the app -->
-  <div class="card" id="openbox" hidden>
-    <p><a class="cta" id="openapp" href="#">…</a></p>
-    <p class="muted" id="openhint"></p>
-    <p class="muted"><a id="openpreview" href="#">…</a></p>
+  <!-- open the app: mobile only -->
+  <div class="aux" id="openbox" hidden>
+    <p><a id="openapp" href="#">…</a></p>
+    <p class="muted tiny" id="openfail" hidden></p>
+    <p class="muted tiny"><a id="openpreview" href="#">…</a></p>
   </div>
 </div>
 </main>
@@ -70,94 +81,119 @@ const SUPABASE_KEY = 'sb_publishable_2hGC7tD47epR2YYFR-HyCg_Bmqyc5F9';
 const T = {
   en: {
     working:'Just a moment…', workingP:'Confirming your link.',
-    okSignup:'Email confirmed', okSignupP:'Your SayMyFood account is ready. Open the app and sign in.',
-    okChange:'Email address changed', okChangeP:'You can sign in with the new address.',
-    setPw:'Choose a new password', setPwP:'Enter it twice. At least 8 characters.',
+    okSignup:'Email confirmed',      okSignupP:'You can now sign in to SayMyFood.',
+    okChange:'Email address changed', okChangeP:'You can now sign in with this address.',
+    setPw:'Choose a new password',   setPwP:'Enter it twice. At least 8 characters.',
+    okPw:'Password changed',         okPwP:'You can now sign in to SayMyFood with the new password.',
     pw1:'New password', pw2:'Repeat the password', save:'Save the password',
     pwShort:'At least 8 characters.', pwMismatch:'The two passwords are different.',
     pwWeak:'This password appears in known breaches. Choose another one.',
-    okPw:'Password changed', okPwP:'Open the app and sign in with the new password.',
-    open:'Open SayMyFood', openHint:'If nothing happens, SayMyFood is not installed on this device — open it on your phone.',
-    preview:'Testing the preview build? Open it instead',
+    open:'Open SayMyFood on this device',
+    openFail:'SayMyFood did not open — it may not be installed here. Nothing is lost: open the app on your phone and sign in.',
+    preview:'preview build',
+    onPhone:'Open SayMyFood on your phone and sign in.',
     bad:'This link did not work', badP:'It may have expired or already been used. Request a new email from the app.',
     nolink:'This link is incomplete', nolinkP:'Open the most recent email from SayMyFood and tap the button there.'
   },
   ru: {
     working:'Секунду…', workingP:'Проверяем ссылку.',
-    okSignup:'Почта подтверждена', okSignupP:'Аккаунт SayMyFood готов. Откройте приложение и войдите.',
-    okChange:'Адрес почты изменён', okChangeP:'Теперь можно входить с новым адресом.',
-    setPw:'Задайте новый пароль', setPwP:'Введите его дважды. Не короче 8 символов.',
+    okSignup:'Почта подтверждена',   okSignupP:'Теперь можно войти в SayMyFood.',
+    okChange:'Адрес почты изменён',  okChangeP:'Теперь можно входить с этим адресом.',
+    setPw:'Задайте новый пароль',    setPwP:'Введите его дважды. Не короче 8 символов.',
+    okPw:'Пароль изменён',           okPwP:'Теперь можно войти в SayMyFood с новым паролем.',
     pw1:'Новый пароль', pw2:'Повторите пароль', save:'Сохранить пароль',
     pwShort:'Не короче 8 символов.', pwMismatch:'Пароли не совпадают.',
     pwWeak:'Этот пароль встречается в известных утечках. Выберите другой.',
-    okPw:'Пароль изменён', okPwP:'Откройте приложение и войдите с новым паролем.',
-    open:'Открыть SayMyFood', openHint:'Если ничего не произошло, SayMyFood не установлен на этом устройстве — откройте его на телефоне.',
-    preview:'Тестируете preview-сборку? Открыть её',
+    open:'Открыть SayMyFood на этом устройстве',
+    openFail:'SayMyFood не открылся — возможно, он здесь не установлен. Ничего не потеряно: откройте приложение на телефоне и войдите.',
+    preview:'preview-сборка',
+    onPhone:'Откройте SayMyFood на телефоне и войдите.',
     bad:'Ссылка не сработала', badP:'Возможно, истёк срок или ей уже воспользовались. Запросите новое письмо в приложении.',
     nolink:'Ссылка неполная', nolinkP:'Откройте последнее письмо от SayMyFood и нажмите кнопку в нём.'
   },
   pt: {
     working:'Um momento…', workingP:'Verificando o link.',
-    okSignup:'E-mail confirmado', okSignupP:'Sua conta SayMyFood está pronta. Abra o aplicativo e entre.',
-    okChange:'Endereço de e-mail alterado', okChangeP:'Já pode entrar com o novo endereço.',
-    setPw:'Escolha uma nova senha', setPwP:'Digite duas vezes. No mínimo 8 caracteres.',
+    okSignup:'E-mail confirmado',    okSignupP:'Agora você pode entrar no SayMyFood.',
+    okChange:'Endereço alterado',    okChangeP:'Agora você pode entrar com este endereço.',
+    setPw:'Escolha uma nova senha',  setPwP:'Digite duas vezes. No mínimo 8 caracteres.',
+    okPw:'Senha alterada',           okPwP:'Agora você pode entrar no SayMyFood com a nova senha.',
     pw1:'Nova senha', pw2:'Repita a senha', save:'Salvar a senha',
     pwShort:'No mínimo 8 caracteres.', pwMismatch:'As senhas não coincidem.',
     pwWeak:'Esta senha aparece em vazamentos conhecidos. Escolha outra.',
-    okPw:'Senha alterada', okPwP:'Abra o aplicativo e entre com a nova senha.',
-    open:'Abrir o SayMyFood', openHint:'Se nada acontecer, o SayMyFood não está instalado neste aparelho — abra no seu celular.',
-    preview:'Testando a versão preview? Abrir essa',
+    open:'Abrir o SayMyFood neste aparelho',
+    openFail:'O SayMyFood não abriu — talvez não esteja instalado aqui. Nada foi perdido: abra o app no celular e entre.',
+    preview:'versão preview',
+    onPhone:'Abra o SayMyFood no seu celular e entre.',
     bad:'O link não funcionou', badP:'Pode ter expirado ou já ter sido usado. Peça um novo e-mail pelo aplicativo.',
     nolink:'Este link está incompleto', nolinkP:'Abra o e-mail mais recente do SayMyFood e toque no botão dele.'
   },
   es: {
     working:'Un momento…', workingP:'Comprobando el enlace.',
-    okSignup:'Correo confirmado', okSignupP:'Tu cuenta de SayMyFood está lista. Abre la aplicación e inicia sesión.',
-    okChange:'Dirección de correo cambiada', okChangeP:'Ya puedes entrar con la nueva dirección.',
+    okSignup:'Correo confirmado',    okSignupP:'Ya puedes iniciar sesión en SayMyFood.',
+    okChange:'Dirección cambiada',   okChangeP:'Ya puedes entrar con esta dirección.',
     setPw:'Elige una nueva contraseña', setPwP:'Escríbela dos veces. Mínimo 8 caracteres.',
+    okPw:'Contraseña cambiada',      okPwP:'Ya puedes iniciar sesión en SayMyFood con la nueva contraseña.',
     pw1:'Nueva contraseña', pw2:'Repite la contraseña', save:'Guardar la contraseña',
     pwShort:'Mínimo 8 caracteres.', pwMismatch:'Las contraseñas no coinciden.',
     pwWeak:'Esta contraseña aparece en filtraciones conocidas. Elige otra.',
-    okPw:'Contraseña cambiada', okPwP:'Abre la aplicación e inicia sesión con la nueva contraseña.',
-    open:'Abrir SayMyFood', openHint:'Si no ocurre nada, SayMyFood no está instalado en este dispositivo: ábrelo en tu móvil.',
-    preview:'¿Pruebas la versión preview? Ábrela',
+    open:'Abrir SayMyFood en este dispositivo',
+    openFail:'SayMyFood no se ha abierto: puede que no esté instalado aquí. No se ha perdido nada: abre la app en tu móvil e inicia sesión.',
+    preview:'versión preview',
+    onPhone:'Abre SayMyFood en tu móvil e inicia sesión.',
     bad:'El enlace no ha funcionado', badP:'Puede haber caducado o haberse usado ya. Pide un correo nuevo desde la aplicación.',
     nolink:'Este enlace está incompleto', nolinkP:'Abre el correo más reciente de SayMyFood y toca el botón que contiene.'
   }
 };
 
+const $ = id => document.getElementById(id);
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 let lang = 'en';
+let state = 'working';
+let who = '';          // the confirmed address, shown under the heading
+let openTried = false;
+
 function pickLang(){
   let s = null; try { s = localStorage.getItem('smf_lang'); } catch(e){}
   if (s && T[s]) return s;
   const n = (navigator.language || 'en').slice(0,2).toLowerCase();
   return T[n] ? n : 'en';
 }
-const $ = id => document.getElementById(id);
-let state = 'working';
+
+const MAP = {
+  working:['working','workingP'], okSignup:['okSignup','okSignupP'],
+  okChange:['okChange','okChangeP'], setPw:['setPw','setPwP'],
+  okPw:['okPw','okPwP'], bad:['bad','badP'], nolink:['nolink','nolinkP']
+};
+const SUCCESS = { okSignup:1, okChange:1, okPw:1 };
 
 function paint(){
   const d = T[lang];
   document.documentElement.lang = lang;
   document.querySelectorAll('.lang button').forEach(b =>
     b.classList.toggle('active', b.getAttribute('data-lang') === lang));
+
+  const k = MAP[state] || MAP.working;
+  $('title').textContent = d[k[0]];
+  $('tick').hidden = !SUCCESS[state];
+
+  // The address is the answer to "what exactly was confirmed".
+  if (who && SUCCESS[state]) { $('who').textContent = who; $('who').hidden = false; }
+  else { $('who').hidden = true; }
+
+  // On a desktop the app cannot be opened at all, so the next step is a sentence,
+  // not a button that would do nothing.
+  $('lede').textContent = (SUCCESS[state] && !isMobile) ? d.onPhone : d[k[1]];
+
   $('pw1').placeholder = d.pw1;
   $('pw2').placeholder = d.pw2;
   $('pwsave').textContent = d.save;
   $('pwhint').textContent = d.setPwP;
   $('openapp').textContent = d.open;
-  $('openhint').textContent = d.openHint;
+  $('openfail').textContent = d.openFail;
   $('openpreview').textContent = d.preview;
-  const map = {
-    working:['working','workingP'], okSignup:['okSignup','okSignupP'],
-    okChange:['okChange','okChangeP'], setPw:['setPw','setPwP'],
-    okPw:['okPw','okPwP'], bad:['bad','badP'], nolink:['nolink','nolinkP']
-  };
-  const k = map[state] || map.working;
-  $('title').textContent = d[k[0]];
-  $('lede').textContent = d[k[1]];
-  if ($('pwerr').dataset.key) $('pwerr').textContent = d[$('pwerr').dataset.key];
+  if ($('pwerr').dataset.key) $('pwerr').textContent = T[lang][$('pwerr').dataset.key];
 }
+
 document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
   lang = b.getAttribute('data-lang');
   try { localStorage.setItem('smf_lang', lang); } catch(e){}
@@ -171,13 +207,23 @@ const tokenHash = q.get('token_hash') || '';
 const type = q.get('type') || '';
 const ALLOWED = ['signup','recovery','email_change','invite','magiclink','email'];
 
-function deepLink(scheme){
-  return scheme + '://auth/callback?done=' + encodeURIComponent(type);
-}
+function deepLink(scheme){ return scheme + '://auth/callback?done=' + encodeURIComponent(type); }
 $('openapp').href = deepLink('nutrientai');
 $('openpreview').href = deepLink('nutrientai-preview');
 
-function showOpen(){ $('openbox').hidden = false; }
+// If the app opens, this page goes to the background. If it is still visible a
+// moment later, nothing happened - say so instead of leaving the user guessing.
+function watchOpen(){
+  openTried = true;
+  setTimeout(() => {
+    if (openTried && !document.hidden) { $('openfail').hidden = false; }
+  }, 1600);
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden) openTried = false; });
+$('openapp').addEventListener('click', watchOpen);
+$('openpreview').addEventListener('click', watchOpen);
+
+function showOpen(){ if (isMobile) $('openbox').hidden = false; }
 
 if (!tokenHash || ALLOWED.indexOf(type) === -1) {
   state = 'nolink'; paint();
@@ -190,11 +236,14 @@ if (!tokenHash || ALLOWED.indexOf(type) === -1) {
                 : (type === 'magiclink') ? 'magiclink'
                 : (type === 'invite') ? 'invite' : 'signup';
 
-  supabase.auth.verifyOtp({ token_hash: tokenHash, type: otpType }).then(({ error }) => {
+  supabase.auth.verifyOtp({ token_hash: tokenHash, type: otpType }).then(({ data, error }) => {
     if (error) {
       console.error('verifyOtp', error);
       state = 'bad'; paint(); return;
     }
+    // Straight from the server's answer, not from an assumption.
+    who = (data && data.user && data.user.email) ? data.user.email : '';
+
     if (type === 'recovery') {
       state = 'setPw'; paint();
       $('pwform').hidden = false;
