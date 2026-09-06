@@ -4,16 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>SayMyFood — Open the app</title>
+<title>SayMyFood</title>
 <link rel="icon" href="../../brand/saymyfood-mark.png">
 <link rel="stylesheet" href="../../site.css">
+<style>
+  .authbox{max-width:460px}
+  .authbox input[type=password]{width:100%;box-sizing:border-box;padding:12px 14px;margin:0 0 12px;
+    font-size:15px;border-radius:10px;border:1px solid #3a4a3d;background:#141a15;color:#eef2ee}
+  .authbox input[type=password]:focus{outline:none;border-color:#7fd39a}
+  .authbox button.cta{border:0;cursor:pointer;font:inherit;font-weight:600}
+  .authbox .err{color:#ff9b8a}
+  .authbox .ok{color:#7fd39a}
+  .authbox [hidden]{display:none}
+</style>
 </head>
 <body>
 <header><div class="wrap hd">
 <a class="hd-brand" href="../../index.html"><span class="mark nosheen"><img src="../../brand/saymyfood-mark.png" alt="SayMyFood"></span>SayMyFood</a>
-<nav class="hd-nav">
-<a class="cta" href="mailto:saymyfood@gmail.com">Contact</a>
-</nav>
+<nav class="hd-nav"><a class="cta" href="mailto:saymyfood@gmail.com">Contact</a></nav>
 </div></header>
 
 <main class="legal">
@@ -24,53 +32,26 @@
 <button data-lang="es">Español</button>
 </nav>
 
-<!-- ══════════════════════ EN ══════════════════════ -->
-<section data-section="en">
-  <h1 data-role="title">Almost there</h1>
-  <p data-role="lede">Tap the button below to finish in the SayMyFood app.</p>
-  <div class="card" data-role="action">
-    <p><a class="cta" data-role="open" href="#">Open SayMyFood</a></p>
-    <p class="muted" data-role="hint">If nothing happens, make sure SayMyFood is installed on this device, then tap again.</p>
-    <p class="muted"><a data-role="preview" href="#">Testing the preview build? Open it instead</a></p>
-  </div>
-  <p class="muted" data-role="nolink" hidden>This link is incomplete. Open the most recent email from SayMyFood and tap the button there. If the link has expired, request a new one from the app.</p>
-</section>
+<div class="authbox">
+  <h1 id="title">…</h1>
+  <p id="lede"></p>
 
-<!-- ══════════════════════ RU ══════════════════════ -->
-<section data-section="ru" hidden>
-  <h1 data-role="title">Почти готово</h1>
-  <p data-role="lede">Нажмите кнопку ниже, чтобы завершить в приложении SayMyFood.</p>
-  <div class="card" data-role="action">
-    <p><a class="cta" data-role="open" href="#">Открыть SayMyFood</a></p>
-    <p class="muted" data-role="hint">Если ничего не произошло, убедитесь, что SayMyFood установлен на этом устройстве, и нажмите ещё раз.</p>
-    <p class="muted"><a data-role="preview" href="#">Тестируете preview-сборку? Открыть её</a></p>
+  <!-- password form, recovery only -->
+  <div class="card" id="pwform" hidden>
+    <input type="password" id="pw1" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false">
+    <input type="password" id="pw2" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false">
+    <p id="pwerr" class="muted err" hidden></p>
+    <p><button class="cta" id="pwsave">…</button></p>
+    <p class="muted" id="pwhint"></p>
   </div>
-  <p class="muted" data-role="nolink" hidden>Ссылка неполная. Откройте последнее письмо от SayMyFood и нажмите кнопку в нём. Если срок действия ссылки истёк, запросите новую в приложении.</p>
-</section>
 
-<!-- ══════════════════════ PT ══════════════════════ -->
-<section data-section="pt" hidden>
-  <h1 data-role="title">Quase lá</h1>
-  <p data-role="lede">Toque no botão abaixo para concluir no aplicativo SayMyFood.</p>
-  <div class="card" data-role="action">
-    <p><a class="cta" data-role="open" href="#">Abrir o SayMyFood</a></p>
-    <p class="muted" data-role="hint">Se nada acontecer, confirme que o SayMyFood está instalado neste aparelho e toque de novo.</p>
-    <p class="muted"><a data-role="preview" href="#">Testando a versão preview? Abrir essa</a></p>
+  <!-- open the app -->
+  <div class="card" id="openbox" hidden>
+    <p><a class="cta" id="openapp" href="#">…</a></p>
+    <p class="muted" id="openhint"></p>
+    <p class="muted"><a id="openpreview" href="#">…</a></p>
   </div>
-  <p class="muted" data-role="nolink" hidden>Este link está incompleto. Abra o e-mail mais recente do SayMyFood e toque no botão dele. Se o link expirou, peça um novo pelo aplicativo.</p>
-</section>
-
-<!-- ══════════════════════ ES ══════════════════════ -->
-<section data-section="es" hidden>
-  <h1 data-role="title">Ya casi</h1>
-  <p data-role="lede">Toca el botón de abajo para terminar en la aplicación SayMyFood.</p>
-  <div class="card" data-role="action">
-    <p><a class="cta" data-role="open" href="#">Abrir SayMyFood</a></p>
-    <p class="muted" data-role="hint">Si no ocurre nada, comprueba que SayMyFood está instalado en este dispositivo y toca otra vez.</p>
-    <p class="muted"><a data-role="preview" href="#">¿Estás probando la versión preview? Ábrela</a></p>
-  </div>
-  <p class="muted" data-role="nolink" hidden>Este enlace está incompleto. Abre el correo más reciente de SayMyFood y toca el botón que contiene. Si el enlace ha caducado, pide uno nuevo desde la aplicación.</p>
-</section>
+</div>
 </main>
 
 <footer><div class="wrap ft">
@@ -78,58 +59,170 @@
 <span class="ft-links"><a href="../../index.html">Home</a><a href="../../privacy.html">Privacy</a><a href="../../terms.html">Terms</a><a href="mailto:saymyfood@gmail.com">Contact</a></span>
 </div></footer>
 
-<script>
-(function(){
-  // Language switch - same mechanism and same localStorage key as the legal pages.
-  var buttons = document.querySelectorAll('.lang button');
-  function show(lang){
-    document.querySelectorAll('[data-section]').forEach(function(s){
-      s.hidden = s.getAttribute('data-section') !== lang;
-    });
-    buttons.forEach(function(b){
-      b.classList.toggle('active', b.getAttribute('data-lang') === lang);
-    });
-    document.documentElement.lang = lang;
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+// Publishable key. Public by design: it ships inside every installed copy of the
+// app. Row-level security, not this string, is what protects the data.
+const SUPABASE_URL = 'https://dwbytualmguxxtceywtg.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_2hGC7tD47epR2YYFR-HyCg_Bmqyc5F9';
+
+const T = {
+  en: {
+    working:'Just a moment…', workingP:'Confirming your link.',
+    okSignup:'Email confirmed', okSignupP:'Your SayMyFood account is ready. Open the app and sign in.',
+    okChange:'Email address changed', okChangeP:'You can sign in with the new address.',
+    setPw:'Choose a new password', setPwP:'Enter it twice. At least 8 characters.',
+    pw1:'New password', pw2:'Repeat the password', save:'Save the password',
+    pwShort:'At least 8 characters.', pwMismatch:'The two passwords are different.',
+    pwWeak:'This password appears in known breaches. Choose another one.',
+    okPw:'Password changed', okPwP:'Open the app and sign in with the new password.',
+    open:'Open SayMyFood', openHint:'If nothing happens, SayMyFood is not installed on this device — open it on your phone.',
+    preview:'Testing the preview build? Open it instead',
+    bad:'This link did not work', badP:'It may have expired or already been used. Request a new email from the app.',
+    nolink:'This link is incomplete', nolinkP:'Open the most recent email from SayMyFood and tap the button there.'
+  },
+  ru: {
+    working:'Секунду…', workingP:'Проверяем ссылку.',
+    okSignup:'Почта подтверждена', okSignupP:'Аккаунт SayMyFood готов. Откройте приложение и войдите.',
+    okChange:'Адрес почты изменён', okChangeP:'Теперь можно входить с новым адресом.',
+    setPw:'Задайте новый пароль', setPwP:'Введите его дважды. Не короче 8 символов.',
+    pw1:'Новый пароль', pw2:'Повторите пароль', save:'Сохранить пароль',
+    pwShort:'Не короче 8 символов.', pwMismatch:'Пароли не совпадают.',
+    pwWeak:'Этот пароль встречается в известных утечках. Выберите другой.',
+    okPw:'Пароль изменён', okPwP:'Откройте приложение и войдите с новым паролем.',
+    open:'Открыть SayMyFood', openHint:'Если ничего не произошло, SayMyFood не установлен на этом устройстве — откройте его на телефоне.',
+    preview:'Тестируете preview-сборку? Открыть её',
+    bad:'Ссылка не сработала', badP:'Возможно, истёк срок или ей уже воспользовались. Запросите новое письмо в приложении.',
+    nolink:'Ссылка неполная', nolinkP:'Откройте последнее письмо от SayMyFood и нажмите кнопку в нём.'
+  },
+  pt: {
+    working:'Um momento…', workingP:'Verificando o link.',
+    okSignup:'E-mail confirmado', okSignupP:'Sua conta SayMyFood está pronta. Abra o aplicativo e entre.',
+    okChange:'Endereço de e-mail alterado', okChangeP:'Já pode entrar com o novo endereço.',
+    setPw:'Escolha uma nova senha', setPwP:'Digite duas vezes. No mínimo 8 caracteres.',
+    pw1:'Nova senha', pw2:'Repita a senha', save:'Salvar a senha',
+    pwShort:'No mínimo 8 caracteres.', pwMismatch:'As senhas não coincidem.',
+    pwWeak:'Esta senha aparece em vazamentos conhecidos. Escolha outra.',
+    okPw:'Senha alterada', okPwP:'Abra o aplicativo e entre com a nova senha.',
+    open:'Abrir o SayMyFood', openHint:'Se nada acontecer, o SayMyFood não está instalado neste aparelho — abra no seu celular.',
+    preview:'Testando a versão preview? Abrir essa',
+    bad:'O link não funcionou', badP:'Pode ter expirado ou já ter sido usado. Peça um novo e-mail pelo aplicativo.',
+    nolink:'Este link está incompleto', nolinkP:'Abra o e-mail mais recente do SayMyFood e toque no botão dele.'
+  },
+  es: {
+    working:'Un momento…', workingP:'Comprobando el enlace.',
+    okSignup:'Correo confirmado', okSignupP:'Tu cuenta de SayMyFood está lista. Abre la aplicación e inicia sesión.',
+    okChange:'Dirección de correo cambiada', okChangeP:'Ya puedes entrar con la nueva dirección.',
+    setPw:'Elige una nueva contraseña', setPwP:'Escríbela dos veces. Mínimo 8 caracteres.',
+    pw1:'Nueva contraseña', pw2:'Repite la contraseña', save:'Guardar la contraseña',
+    pwShort:'Mínimo 8 caracteres.', pwMismatch:'Las contraseñas no coinciden.',
+    pwWeak:'Esta contraseña aparece en filtraciones conocidas. Elige otra.',
+    okPw:'Contraseña cambiada', okPwP:'Abre la aplicación e inicia sesión con la nueva contraseña.',
+    open:'Abrir SayMyFood', openHint:'Si no ocurre nada, SayMyFood no está instalado en este dispositivo: ábrelo en tu móvil.',
+    preview:'¿Pruebas la versión preview? Ábrela',
+    bad:'El enlace no ha funcionado', badP:'Puede haber caducado o haberse usado ya. Pide un correo nuevo desde la aplicación.',
+    nolink:'Este enlace está incompleto', nolinkP:'Abre el correo más reciente de SayMyFood y toca el botón que contiene.'
   }
-  buttons.forEach(function(b){
-    b.addEventListener('click', function(){
-      show(b.getAttribute('data-lang'));
-      try { localStorage.setItem('smf_lang', b.getAttribute('data-lang')); } catch(e){}
-    });
+};
+
+let lang = 'en';
+function pickLang(){
+  let s = null; try { s = localStorage.getItem('smf_lang'); } catch(e){}
+  if (s && T[s]) return s;
+  const n = (navigator.language || 'en').slice(0,2).toLowerCase();
+  return T[n] ? n : 'en';
+}
+const $ = id => document.getElementById(id);
+let state = 'working';
+
+function paint(){
+  const d = T[lang];
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang button').forEach(b =>
+    b.classList.toggle('active', b.getAttribute('data-lang') === lang));
+  $('pw1').placeholder = d.pw1;
+  $('pw2').placeholder = d.pw2;
+  $('pwsave').textContent = d.save;
+  $('pwhint').textContent = d.setPwP;
+  $('openapp').textContent = d.open;
+  $('openhint').textContent = d.openHint;
+  $('openpreview').textContent = d.preview;
+  const map = {
+    working:['working','workingP'], okSignup:['okSignup','okSignupP'],
+    okChange:['okChange','okChangeP'], setPw:['setPw','setPwP'],
+    okPw:['okPw','okPwP'], bad:['bad','badP'], nolink:['nolink','nolinkP']
+  };
+  const k = map[state] || map.working;
+  $('title').textContent = d[k[0]];
+  $('lede').textContent = d[k[1]];
+  if ($('pwerr').dataset.key) $('pwerr').textContent = d[$('pwerr').dataset.key];
+}
+document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
+  lang = b.getAttribute('data-lang');
+  try { localStorage.setItem('smf_lang', lang); } catch(e){}
+  paint();
+}));
+lang = pickLang();
+paint();
+
+const q = new URLSearchParams(window.location.search);
+const tokenHash = q.get('token_hash') || '';
+const type = q.get('type') || '';
+const ALLOWED = ['signup','recovery','email_change','invite','magiclink','email'];
+
+function deepLink(scheme){
+  return scheme + '://auth/callback?done=' + encodeURIComponent(type);
+}
+$('openapp').href = deepLink('nutrientai');
+$('openpreview').href = deepLink('nutrientai-preview');
+
+function showOpen(){ $('openbox').hidden = false; }
+
+if (!tokenHash || ALLOWED.indexOf(type) === -1) {
+  state = 'nolink'; paint();
+} else {
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+    auth: { detectSessionInUrl: false, persistSession: false, autoRefreshToken: false }
   });
-  var saved = null; try { saved = localStorage.getItem('smf_lang'); } catch(e){}
-  var nav = saved || (navigator.language || 'en').slice(0,2).toLowerCase();
-  if (['ru','pt','es'].indexOf(nav) !== -1) show(nav);
+  const otpType = (type === 'email_change') ? 'email_change'
+                : (type === 'recovery') ? 'recovery'
+                : (type === 'magiclink') ? 'magiclink'
+                : (type === 'invite') ? 'invite' : 'signup';
 
-  // Carry the one-time token to the app.
-  // Supabase email templates point here with ?token_hash=...&type=signup|recovery|email_change
-  // The app verifies it (supabase.auth.verifyOtp). Nothing is verified on this page,
-  // and the token is never sent anywhere from here.
-  var q = new URLSearchParams(window.location.search);
-  var tokenHash = q.get('token_hash') || '';
-  var type = q.get('type') || '';
-  var ALLOWED = ['signup','recovery','email_change','invite','magiclink','email'];
-
-  function deepLink(scheme){
-    return scheme + '://auth/callback?token_hash=' + encodeURIComponent(tokenHash) +
-           '&type=' + encodeURIComponent(type);
-  }
-
-  var ok = tokenHash.length > 0 && ALLOWED.indexOf(type) !== -1;
-
-  document.querySelectorAll('[data-role="open"]').forEach(function(a){
-    if (ok) { a.setAttribute('href', deepLink('nutrientai')); }
+  supabase.auth.verifyOtp({ token_hash: tokenHash, type: otpType }).then(({ error }) => {
+    if (error) {
+      console.error('verifyOtp', error);
+      state = 'bad'; paint(); return;
+    }
+    if (type === 'recovery') {
+      state = 'setPw'; paint();
+      $('pwform').hidden = false;
+      $('pwsave').addEventListener('click', async () => {
+        const a = $('pw1').value, b = $('pw2').value;
+        const err = $('pwerr');
+        err.hidden = true; err.dataset.key = '';
+        if (a.length < 8) { err.dataset.key = 'pwShort'; err.hidden = false; paint(); return; }
+        if (a !== b)      { err.dataset.key = 'pwMismatch'; err.hidden = false; paint(); return; }
+        $('pwsave').disabled = true;
+        const { error: upErr } = await supabase.auth.updateUser({ password: a });
+        $('pwsave').disabled = false;
+        if (upErr) {
+          console.error('updateUser', upErr);
+          err.dataset.key = /pwned|breach|weak/i.test(upErr.message || '') ? 'pwWeak' : 'pwShort';
+          err.hidden = false; paint(); return;
+        }
+        await supabase.auth.signOut();
+        $('pwform').hidden = true;
+        state = 'okPw'; paint(); showOpen();
+      });
+    } else {
+      supabase.auth.signOut();
+      state = (type === 'email_change') ? 'okChange' : 'okSignup';
+      paint(); showOpen();
+    }
   });
-  document.querySelectorAll('[data-role="preview"]').forEach(function(a){
-    if (ok) { a.setAttribute('href', deepLink('nutrientai-preview')); }
-  });
-
-  if (!ok) {
-    document.querySelectorAll('[data-role="action"]').forEach(function(el){ el.hidden = true; });
-    document.querySelectorAll('[data-role="lede"]').forEach(function(el){ el.hidden = true; });
-    document.querySelectorAll('[data-role="nolink"]').forEach(function(el){ el.hidden = false; });
-  }
-})();
+}
 </script>
 </body>
 </html>
