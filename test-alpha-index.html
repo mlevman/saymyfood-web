@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SayMyFood — Closed test</title>
+<link rel="icon" href="../../brand/saymyfood-mark.png">
+<link rel="stylesheet" href="../../site.css">
+<style>
+  .tf{max-width:460px}
+  .tf h1{margin:0 0 10px}
+  .tf .what{margin:0 0 4px;font-size:15px;line-height:22px}
+  .tf .more{margin:0 0 26px;font-size:14px}
+  .tf .field{position:relative;margin:0 0 12px}
+  .tf input[type=email]{width:100%;box-sizing:border-box;padding:13px 15px;font-size:16px;
+    border-radius:10px;border:1px solid #3a4a3d;background:#141a15;color:#eef2ee}
+  .tf input[type=email]:focus{outline:none;border-color:#7fd39a}
+  .tf input[type=email]::placeholder{color:#6d7a6f}
+  /* honeypot: off-screen, never focusable, no autofill */
+  .tf .hp{position:absolute;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none}
+  .tf button.cta{border:0;cursor:pointer;font:inherit;font-weight:600;width:100%;padding:14px 22px}
+  .tf button.cta[disabled]{opacity:.55;cursor:default}
+  .tf .msg{margin:12px 0 0;font-size:14px;line-height:20px;min-height:20px}
+  .tf .msg.err{color:#ff9b8a}
+  .tf .gets{margin:24px 0 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.08)}
+  .tf .gets li{margin:0 0 8px;font-size:14px;line-height:20px}
+  .tf .fine{margin:18px 0 0;font-size:12px;line-height:18px;opacity:.7}
+  .tf [hidden]{display:none}
+
+  /* The one animation, and it fires once: at the moment the request is sent. */
+  .tf .done{text-align:center;padding:8px 0 0}
+  .tf .done svg{display:block;margin:0 auto 18px}
+  .tf .done h2{margin:0 0 10px;font-size:22px}
+  .tf .done p{margin:0 0 8px;font-size:15px;line-height:22px}
+  @keyframes smf-lift{
+    0%{transform:translateY(10px);opacity:0}
+    35%{transform:translateY(0);opacity:1}
+    100%{transform:translateY(-64px);opacity:0}
+  }
+  @keyframes smf-trail{0%{opacity:0;transform:scaleY(0)}40%{opacity:.9}100%{opacity:0;transform:scaleY(1)}}
+  @keyframes smf-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .smf-craft{animation:smf-lift 1.5s cubic-bezier(.4,0,.2,1) forwards}
+  .smf-trail{transform-origin:top center;animation:smf-trail 1.5s ease-out forwards}
+  .smf-text{animation:smf-in .5s ease-out .9s backwards}
+  @media (prefers-reduced-motion: reduce){
+    .smf-craft,.smf-trail,.smf-text{animation:none}
+    .smf-craft{opacity:0}
+  }
+</style>
+</head>
+<body>
+<header><div class="wrap hd">
+<a class="hd-brand" href="../../index.html"><span class="mark nosheen"><img src="../../brand/saymyfood-mark.png" alt="SayMyFood"></span>SayMyFood</a>
+<nav class="hd-nav"><a class="cta" href="mailto:saymyfood@gmail.com">Contact</a></nav>
+</div></header>
+
+<main class="legal">
+<nav class="lang" aria-label="Language">
+<button data-lang="en" class="active">English</button>
+<button data-lang="ru">Русский</button>
+<button data-lang="pt">Português</button>
+<button data-lang="es">Español</button>
+</nav>
+
+<div class="tf">
+
+  <!-- the form -->
+  <div id="formwrap">
+    <h1 id="t-title">…</h1>
+    <p class="what" id="t-what"></p>
+    <p class="more"><a href="../../index.html" id="t-more"></a></p>
+
+    <div class="field">
+      <input type="email" id="email" autocomplete="email" autocapitalize="none"
+             autocorrect="off" spellcheck="false" inputmode="email">
+      <!-- Honeypot. A real person never fills this; the RPC answers ok and
+           writes nothing when it arrives non-empty. -->
+      <input class="hp" type="text" id="website" name="website" tabindex="-1"
+             autocomplete="off" aria-hidden="true">
+    </div>
+    <button class="cta" id="send">…</button>
+    <p class="msg" id="msg" role="status"></p>
+
+    <ul class="gets" id="gets"></ul>
+    <p class="fine" id="fine"></p>
+  </div>
+
+  <!-- the answer -->
+  <div class="done" id="done" hidden>
+    <svg width="72" height="96" viewBox="0 0 72 96" fill="none" aria-hidden="true">
+      <rect class="smf-trail" x="33" y="52" width="6" height="40" rx="3" fill="#7fd39a" opacity=".35"/>
+      <g class="smf-craft">
+        <path d="M36 8c7 8 11 18 11 29v10H25V37c0-11 4-21 11-29z" fill="#7fd39a"/>
+        <path d="M25 40l-8 12v6l8-5V40zM47 40l8 12v6l-8-5V40z" fill="#3f7d4c"/>
+        <circle cx="36" cy="32" r="5" fill="#0f1510"/>
+        <path d="M30 47h12l-3 8h-6l-3-8z" fill="#f2b23e"/>
+      </g>
+    </svg>
+    <div class="smf-text">
+      <h2 id="d-title">…</h2>
+      <p id="d-body"></p>
+      <p class="fine" id="d-fine"></p>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer><div class="wrap ft">
+<span style="display:flex;align-items:center;gap:9px"><span class="mark nosheen" style="width:18px;height:18px"><img src="../../brand/saymyfood-mark.png" alt=""></span>© 2026 SayMyFood</span>
+<span class="ft-links"><a href="../../index.html">Home</a><a href="../../privacy.html">Privacy</a><a href="../../terms.html">Terms</a><a href="mailto:saymyfood@gmail.com">Contact</a></span>
+</div></footer>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+// Publishable key. Public by design: it ships inside every installed copy of the
+// app. Row-level security, not this string, is what protects the data. The table
+// behind this form has RLS on and NO policies - the only way in is the RPC below,
+// which validates, rate-limits and swallows the honeypot.
+const SUPABASE_URL = 'https://dwbytualmguxxtceywtg.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_2hGC7tD47epR2YYFR-HyCg_Bmqyc5F9';
+
+const T = {
+  en: {
+    title: 'Become a closed tester',
+    what: 'SayMyFood is a food diary that counts calories and macros from a photo, your voice or one line of text.',
+    more: 'More about the app →',
+    placeholder: 'Your Google account email',
+    send: 'Send the request',
+    gets: [
+      'A link to install the app from Google Play',
+      'A code for full access to every feature, 90 days, free',
+      'A direct line to us — you write, a person answers'
+    ],
+    fine: 'We need the email of your GOOGLE account: Google Play only shows the app to accounts on the tester list. Android only for now. The address is used for the test and for nothing else.',
+    sending: 'Sending…',
+    bad: 'That does not look like an email address. Have another look.',
+    busy: 'Too many requests right now. Try again in a few minutes.',
+    netfail: 'The request did not go through — check your connection and try again.',
+    dTitle: 'Request received',
+    dBody: 'We will write to you within a day. The email will carry the install link and your access code — check the spam folder if it is quiet.',
+    dFine: 'Nothing to pay, no card, nothing renews by itself.'
+  },
+  ru: {
+    title: 'Стать закрытым тестировщиком',
+    what: 'SayMyFood — дневник питания: считает калории и БЖУ по фотографии, голосу или одной строке текста.',
+    more: 'Подробнее о приложении →',
+    placeholder: 'Почта вашего аккаунта Google',
+    send: 'Отправить заявку',
+    gets: [
+      'Ссылку на установку приложения из Google Play',
+      'Код полного доступа ко всем функциям на 90 дней, бесплатно',
+      'Прямую связь с нами — вы пишете, отвечает человек'
+    ],
+    fine: 'Нужна почта именно вашего аккаунта GOOGLE: Google Play показывает приложение только тем, кто есть в списке тестировщиков. Пока только Android. Адрес используется для теста и больше ни для чего.',
+    sending: 'Отправляем…',
+    bad: 'Это не похоже на адрес почты. Посмотрите ещё раз.',
+    busy: 'Сейчас слишком много заявок. Попробуйте через несколько минут.',
+    netfail: 'Заявка не ушла — проверьте соединение и попробуйте снова.',
+    dTitle: 'Заявка принята',
+    dBody: 'Мы напишем вам в течение суток. В письме будет ссылка на установку и код доступа — если тихо, загляните в папку «Спам».',
+    dFine: 'Платить ничего не нужно, карта не требуется, само ничего не продлевается.'
+  },
+  pt: {
+    title: 'Seja um testador do teste fechado',
+    what: 'O SayMyFood é um diário alimentar: calcula calorias e macros a partir de uma foto, da sua voz ou de uma linha de texto.',
+    more: 'Mais sobre o aplicativo →',
+    placeholder: 'E-mail da sua conta Google',
+    send: 'Enviar a solicitação',
+    gets: [
+      'Um link para instalar o app pelo Google Play',
+      'Um código de acesso completo a todos os recursos, 90 dias, grátis',
+      'Contato direto com a gente — você escreve, uma pessoa responde'
+    ],
+    fine: 'Precisamos do e-mail da sua conta GOOGLE: o Google Play só mostra o app para as contas da lista de testadores. Por enquanto só Android. O endereço é usado para o teste e para mais nada.',
+    sending: 'Enviando…',
+    bad: 'Isso não parece um e-mail. Confira novamente.',
+    busy: 'Muitas solicitações agora. Tente de novo em alguns minutos.',
+    netfail: 'A solicitação não foi enviada — verifique a conexão e tente de novo.',
+    dTitle: 'Solicitação recebida',
+    dBody: 'Vamos escrever para você em até um dia. O e-mail traz o link de instalação e o seu código de acesso — se demorar, veja a pasta de spam.',
+    dFine: 'Não precisa pagar nada, não pede cartão e nada é renovado automaticamente.'
+  },
+  es: {
+    title: 'Hazte tester de la prueba cerrada',
+    what: 'SayMyFood es un diario de comidas: calcula calorías y macros a partir de una foto, de tu voz o de una línea de texto.',
+    more: 'Más sobre la aplicación →',
+    placeholder: 'Correo de tu cuenta de Google',
+    send: 'Enviar la solicitud',
+    gets: [
+      'Un enlace para instalar la app desde Google Play',
+      'Un código de acceso completo a todas las funciones, 90 días, gratis',
+      'Contacto directo con nosotros: tú escribes, responde una persona'
+    ],
+    fine: 'Necesitamos el correo de tu cuenta de GOOGLE: Google Play solo muestra la app a las cuentas de la lista de testers. De momento solo Android. La dirección se usa para la prueba y para nada más.',
+    sending: 'Enviando…',
+    bad: 'Eso no parece un correo. Revísalo otra vez.',
+    busy: 'Hay demasiadas solicitudes ahora mismo. Inténtalo en unos minutos.',
+    netfail: 'La solicitud no se ha enviado: comprueba la conexión e inténtalo de nuevo.',
+    dTitle: 'Solicitud recibida',
+    dBody: 'Te escribiremos en menos de un día. El correo llevará el enlace de instalación y tu código de acceso; si tarda, mira la carpeta de spam.',
+    dFine: 'No hay que pagar nada, no se pide tarjeta y nada se renueva solo.'
+  }
+};
+
+const $ = id => document.getElementById(id);
+let lang = 'en';
+let sending = false;
+
+function pickLang(){
+  let s = null; try { s = localStorage.getItem('smf_lang'); } catch(e){}
+  if (s && T[s]) return s;
+  const n = (navigator.language || 'en').slice(0,2).toLowerCase();
+  return T[n] ? n : 'en';
+}
+
+function paint(){
+  const d = T[lang];
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang button').forEach(b =>
+    b.classList.toggle('active', b.getAttribute('data-lang') === lang));
+  $('t-title').textContent = d.title;
+  $('t-what').textContent = d.what;
+  $('t-more').textContent = d.more;
+  $('email').placeholder = d.placeholder;
+  $('send').textContent = sending ? d.sending : d.send;
+  $('gets').innerHTML = d.gets.map(g => `<li>${g}</li>`).join('');
+  $('fine').textContent = d.fine;
+  $('d-title').textContent = d.dTitle;
+  $('d-body').textContent = d.dBody;
+  $('d-fine').textContent = d.dFine;
+  const key = $('msg').dataset.key;
+  $('msg').textContent = key ? d[key] : '';
+}
+
+document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
+  lang = b.getAttribute('data-lang');
+  try { localStorage.setItem('smf_lang', lang); } catch(e){}
+  paint();
+}));
+lang = pickLang();
+paint();
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: { detectSessionInUrl: false, persistSession: false, autoRefreshToken: false }
+});
+
+function fail(key){
+  const m = $('msg');
+  m.dataset.key = key;
+  m.classList.add('err');
+  paint();
+}
+
+async function submit(){
+  if (sending) return;
+  const email = $('email').value.trim();
+  const website = $('website').value;
+
+  $('msg').dataset.key = '';
+  $('msg').classList.remove('err');
+
+  // Cheap client-side shape check. The RPC checks again - this one only saves a
+  // round trip and gives an instant answer.
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || email.length > 254) {
+    fail('bad');
+    return;
+  }
+
+  sending = true;
+  $('send').disabled = true;
+  paint();
+
+  try {
+    const { data, error } = await supabase.rpc('request_tester_access', {
+      p_email: email,
+      p_lang: lang,          // decides the language of the mail they get later
+      p_website: website
+    });
+    sending = false;
+    $('send').disabled = false;
+
+    if (error) {
+      console.error('request_tester_access', error);
+      fail('netfail');
+      paint();
+      return;
+    }
+    if (data && data.ok === false) {
+      fail(data.reason === 'busy' ? 'busy' : 'bad');
+      paint();
+      return;
+    }
+
+    // Accepted. The form goes, the answer arrives - one event, one animation.
+    $('formwrap').hidden = true;
+    $('done').hidden = false;
+  } catch (e) {
+    console.error('request_tester_access', e);
+    sending = false;
+    $('send').disabled = false;
+    fail('netfail');
+    paint();
+  }
+}
+
+$('send').addEventListener('click', submit);
+$('email').addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+</script>
+</body>
+</html>
