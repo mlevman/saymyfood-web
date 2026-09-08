@@ -1,7 +1,7 @@
 // Leaderboard: Supabase REST (public anon key) with a local fallback when offline / not deployed.
 const BOARD={
-url:'https://dwbytualmguxxtceywtg.supabase.co/rest/v1/apple_scores',
-key:'sb_publishable_2hGC7tD47epR2YYFR-HyCg_Bmqyc5F9',
+url:'https://rdzpmomnzacmfortgqad.supabase.co/rest/v1/apple_scores',
+key:'sb_publishable_szeZ5EuwQUZQPV-Xjzyp7Q_uXnL_OQe',
 h(){return{apikey:this.key,Authorization:'Bearer '+this.key,'Content-Type':'application/json'}},
 local(){try{return JSON.parse(localStorage.getItem('smf_apple_board')||'[]')}catch(e){return[]}},
 async list(){
