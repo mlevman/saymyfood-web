@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>SayMyFood — Apple fight</title>
+<link rel="icon" href="../../../brand/saymyfood-mark.png">
+<link rel="stylesheet" href="../../../site.css">
+<style>
+html,body{height:100%}
+body{margin:0;background:#161616;color:var(--tx);font-family:var(--font);display:flex;flex-direction:column;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;gap:10px;flex-shrink:0}
+.top a{display:flex;align-items:center;gap:8px;color:var(--tx2);text-decoration:none;font-size:13px;font-weight:600}
+.top a:hover{color:var(--tx)}
+.top .mark{width:22px;height:22px}
+.top .brd{color:var(--tx2);background:none;border:1px solid var(--hair2);border-radius:999px;padding:6px 12px;font:600 13px var(--font);cursor:pointer}
+.arena{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:0 10px}
+.frame{position:relative;width:min(100%,calc((100vh - 120px) * 16 / 9));aspect-ratio:16/9;border:1px solid var(--hair);border-radius:14px;overflow:hidden;background:#141816}
+canvas{display:block;width:100%;height:100%}
+.ov{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:center;padding:14px;background:rgba(22,22,22,.86);backdrop-filter:blur(3px);overflow:auto;z-index:3}
+.ov[hidden]{display:none}
+.box{max-width:440px;width:100%;text-align:center;margin:auto}
+.box h2{margin:0 0 6px;font-size:clamp(18px,3vw,26px);letter-spacing:-.02em;font-weight:700}
+.box p{margin:0 0 10px;color:var(--tx2);font-size:clamp(12.5px,1.8vw,14.5px);line-height:1.4;text-wrap:pretty}
+.box .btn{padding:11px 22px;font-size:14px;border-radius:12px;min-width:150px}
+.box .ghost{background:none;border:1px solid var(--hair2);color:var(--tx);padding:10px 20px;border-radius:12px;font:600 14px var(--font);cursor:pointer}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.heroes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 8px}
+.hero{border:1px solid var(--hair2);border-radius:14px;padding:6px 8px;background:var(--card);cursor:pointer;color:var(--tx);font:inherit;transition:border-color .15s;display:flex;align-items:center;gap:8px;text-align:left}
+.hero.on{border-color:var(--mint);box-shadow:0 0 0 2px var(--mint-dim)}
+.hero canvas{display:block;flex-shrink:0;width:auto;height:clamp(48px,9vh,84px);aspect-ratio:1}
+.hero b{display:block;font-size:14px;line-height:1.2}
+.hero small{display:block;color:var(--mint);font-size:11.5px;margin-top:3px;line-height:1.25}
+.hard{display:flex;align-items:center;gap:10px;text-align:left;margin:0 0 10px;padding:7px 12px;border:1px solid var(--hair2);border-radius:12px;cursor:pointer;background:var(--card)}
+.hard:has(input:checked){border-color:#F2717A;box-shadow:0 0 0 2px rgba(242,113,122,.20)}
+.hard:has(input:checked) b{color:#F2717A}
+.hard input{accent-color:#F2717A;width:18px;height:18px;margin:0;flex-shrink:0}
+.hard b{display:block;font-size:14px}.hard small{display:block;font-size:12px;color:var(--tx2);line-height:1.35;margin-top:2px}
+.stats{font-size:13.5px}.stats .sum{border-top:1px solid var(--hair2);padding-top:5px;margin-top:3px;color:var(--tx);font-weight:700}.stats .x2{grid-column:1/-1;color:#F2717A;font-weight:700;font-size:13px;margin-top:2px}
+.stats{display:grid;grid-template-columns:auto auto;gap:4px 22px;justify-content:center;margin:0 0 16px;font-size:14px;color:var(--tx2)}
+.stats b{color:var(--tx);text-align:right;font-variant-numeric:tabular-nums}
+.big{font-size:clamp(30px,6vw,46px);font-weight:800;letter-spacing:-.03em;color:var(--mint);margin:2px 0 10px;font-variant-numeric:tabular-nums}
+.name{display:flex;gap:8px;justify-content:center;margin:0 0 12px}
+.name input{flex:1;max-width:220px;padding:10px 12px;font:500 15px var(--font);border-radius:11px;border:1px solid var(--hair2);background:var(--card);color:var(--tx)}
+.name input:focus{outline:none;border-color:var(--mint)}
+.list{max-height:min(50vh,300px);overflow:auto;text-align:left;margin:0 0 14px;border:1px solid var(--hair);border-radius:12px}
+.list div{display:grid;grid-template-columns:34px 1fr auto;gap:10px;padding:7px 12px;font-size:14px;border-bottom:1px solid var(--hair);font-variant-numeric:tabular-nums}
+.list div:last-child{border-bottom:0}.list div.me{background:var(--mint-dim);color:var(--tx)}.list div.hard span:nth-child(2){color:#F2717A;font-weight:700}.list span:first-child{color:var(--tx3)}.list span:last-child{font-weight:700}
+.note{font-size:12px;color:var(--tx3);margin:0 0 12px}
+.lnk{background:none;border:0;padding:4px 0 0;color:var(--mint);font:600 12.5px var(--font);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.rwlist{text-align:left;border:1px solid var(--hair);border-radius:12px;margin:0 0 14px}
+.rwlist div{display:flex;justify-content:space-between;gap:14px;padding:8px 13px;font-size:13.5px;border-bottom:1px solid var(--hair)}
+.rwlist div:last-child{border-bottom:0}.rwlist b{color:var(--mint);font-variant-numeric:tabular-nums;white-space:nowrap}
+.rwlist div.x2 b{color:#F2717A}
+.pad{display:none;position:absolute;left:0;right:0;bottom:0;padding:0 10px 10px;gap:8px;justify-content:space-between;align-items:flex-end;pointer-events:none;z-index:2}
+.pad .grp{display:flex;gap:8px;pointer-events:auto}
+.pad button{min-width:58px;height:54px;border-radius:14px;border:1px solid var(--hair2);background:rgba(21,26,24,.78);color:var(--tx);font:700 13px var(--font);touch-action:none;-webkit-tap-highlight-color:transparent;backdrop-filter:blur(3px)}
+.pad button.act{background:var(--mint-dim);border-color:var(--mint)}
+.pad .thr{min-width:92px;background:rgba(143,220,192,.9);color:#0F1A15;border-color:transparent}
+.pad .thr.act{filter:brightness(1.12)}
+.keys{font-size:12px;color:var(--tx3);text-align:center;padding:6px 0 10px;flex-shrink:0}
+.rot{display:none;position:absolute;inset:0;z-index:4;background:#161616;color:var(--tx2);align-items:center;justify-content:center;text-align:center;padding:30px;font-size:15px;line-height:1.5}
+.rot svg{display:block;margin:0 auto 14px;stroke:var(--mint);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(pointer:coarse){.pad{display:flex}.keys{display:none}.top{padding:6px 10px}.arena{padding:0 6px 6px}.frame{width:min(100%,calc((100dvh - 60px) * 16 / 9))}.frame:has(.ov:not([hidden])) .pad{display:none}}
+@media(pointer:coarse) and (orientation:portrait){.rot{display:flex}.arena,.top{visibility:hidden}}
+</style>
+</head>
+<body>
+<div class="top">
+<a href="../index.html" id="back"><span class="mark nosheen"><img src="../../../brand/saymyfood-mark.png" alt=""></span><span id="t-back">← Back to the request</span></a>
+<button class="brd" id="brd">Leaderboard</button>
+</div>
+<div class="arena"><div class="frame">
+<canvas id="cv" width="960" height="540"></canvas>
+<div class="ov" id="ov-intro"><div class="box">
+<h2 id="t-intro-h"></h2><p id="t-intro-p"></p>
+<div class="heroes">
+<button class="hero on" data-h="boy"><canvas width="120" height="120"></canvas><b id="t-boy"></b><small id="t-boy-s"></small></button>
+<button class="hero" data-h="girl"><canvas width="120" height="120"></canvas><b id="t-girl"></b><small id="t-girl-s"></small></button>
+</div>
+<label class="hard"><input type="checkbox" id="hard"><span><b id="t-hard"></b><small id="t-hard-s"></small></span></label>
+<div class="row"><button class="btn" id="play"></button></div>
+<p class="note" id="t-how" style="margin:8px 0 0"></p>
+<button class="lnk" id="rw-open"></button>
+</div></div>
+<div class="ov" id="ov-clear" hidden><div class="box">
+<h2 id="c-h"></h2>
+<div class="stats"><span id="t-time"></span><b id="c-time"></b><span id="t-round"></span><b id="c-round"></b><span id="t-hearts"></span><b id="c-hearts"></b><span id="t-bonus"></span><b id="c-bonus"></b><span id="t-earned"></span><b id="c-earned"></b><span class="sum" id="t-lv"></span><b class="sum" id="c-lv"></b><span id="t-all"></span><b id="c-all"></b><span class="x2" id="c-x2" hidden></span></div>
+<div class="row"><button class="btn" id="next"></button></div>
+</div></div>
+<div class="ov" id="ov-end" hidden><div class="box">
+<h2 id="e-h"></h2><p id="e-p"></p><div class="big" id="e-score"></div>
+<div class="name"><input id="nm" maxlength="24" autocomplete="nickname"><button class="btn" id="save"></button></div>
+<p class="note" id="e-rank"></p>
+<div class="row"><button class="ghost" id="again"></button><button class="ghost" id="e-brd"></button></div>
+</div></div>
+<div class="ov" id="ov-rw" hidden><div class="box">
+<h2 id="t-rw-h"></h2><div class="rwlist" id="t-rewards"></div>
+<div class="row"><button class="ghost" id="rw-close"></button></div>
+</div></div>
+<div class="ov" id="ov-board" hidden><div class="box">
+<h2 id="t-board"></h2><div class="list" id="list"></div><p class="note" id="b-note"></p>
+<div class="row"><button class="ghost" id="b-close"></button></div>
+</div></div>
+<div class="pad" id="pad">
+<div class="grp"><button data-k="left">◀</button><button data-k="right">▶</button></div>
+<div class="grp"><button data-k="gather" id="p-gather"></button><button data-k="throw" class="thr" id="p-throw"></button></div>
+</div>
+</div></div>
+<div class="rot" id="rot"><div><svg width="44" height="44" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"></rect><path d="M20 8a8 8 0 0 1 2 5M4 16a8 8 0 0 1-2-5"></path></svg><span id="t-rot"></span></div></div>
+<div class="keys" id="t-keys"></div>
+<script src="art.js"></script>
+<script src="board.js"></script>
+<script src="game.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SayMyFood — Closed test</title>
+<link rel="icon" href="../../brand/saymyfood-mark.png">
+<link rel="stylesheet" href="../../site.css">
+<link rel="stylesheet" href="shared.css">
+<style>
+.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.pad{position:absolute;left:50%;bottom:34px;width:120px;height:1px;transform:translateX(-50%);background:linear-gradient(90deg,transparent,var(--hair2) 25%,var(--hair2) 75%,transparent)}
+.pad::before,.pad::after{content:"";position:absolute;top:8px;width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--hair),transparent)}
+.pad::before{left:-10px}.pad::after{right:-10px}
+.heat{position:absolute;left:50%;bottom:36px;width:70px;height:26px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(240,145,62,.32),transparent);filter:blur(4px);animation:heat 2.8s ease-in-out infinite}
+@keyframes heat{0%,100%{opacity:.55;transform:translateX(-50%) scaleX(1)}50%{opacity:.85;transform:translateX(-50%) scaleX(1.12)}}
+.rocket{position:absolute;left:50%;bottom:36px;width:56px;height:118px;margin-left:-28px;transform-origin:50% 50%;will-change:transform}
+.rocket svg{display:block;width:100%;height:100%}
+.rk-logo{position:absolute;left:50%;top:29.7%;width:32.1%;transform:translateX(-50%);border-radius:50%}
+@media(max-width:760px){.rocket{width:42px;height:88px;margin-left:-21px;bottom:30px}.pad{bottom:28px;width:96px}.heat{bottom:30px}}
+@media(prefers-reduced-motion:reduce){.heat{animation:none}}</style>
+</head>
+<body>
+<header><div class="wrap hd">
+<a class="hd-brand" href="../../index.html"><span class="mark nosheen"><img src="../../brand/saymyfood-mark.png" alt="SayMyFood"></span>SayMyFood</a>
+<nav class="hd-nav">
+<a class="hide-s" href="../../index.html" id="nav-home">About the app</a>
+<div class="lswitch">
+<button class="lbtn" id="lbtn" aria-haspopup="listbox" aria-expanded="false">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.6 3 2.6 15 0 18M12 3c-2.6 3-2.6 15 0 18"></path></svg>
+<span id="lcur">EN</span>
+<svg class="cv" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
+<div class="lmenu" id="lmenu" role="listbox">
+<button role="option" data-lang="en">English</button>
+<button role="option" data-lang="ru">Русский</button>
+<button role="option" data-lang="es">Español</button>
+<button role="option" data-lang="pt">Português</button>
+</div>
+</div>
+<a class="cta" href="mailto:saymyfood@gmail.com" id="nav-contact">Contact</a>
+</nav>
+</div></header>
+<main class="alpha"><div class="agrid">
+<div class="tf">
+<div id="formwrap">
+<h1 id="t-title">…</h1>
+<p class="what" id="t-what"></p>
+<p class="more"><a href="../../index.html" id="t-more"></a></p>
+<div class="field">
+<input type="email" id="email" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="email">
+<input class="hp" type="text" id="website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+</div>
+<button class="btn" id="send">…</button>
+<p class="msg" id="msg" role="status"></p>
+<ul class="gets" id="gets"></ul>
+<p class="fine" id="fine"></p>
+<p class="ios" id="ios"><span id="t-ios"></span> <a href="game/index.html" id="t-ios-a"></a></p>
+</div>
+<div class="done" id="done" hidden>
+<h2 id="d-title">…</h2>
+<p id="d-body"></p>
+<p class="fine" id="d-fine"></p>
+</div>
+</div>
+<div class="stage" id="stage" aria-hidden="true"><canvas id="fx"></canvas><div class="pad"></div><div class="heat" id="heat"></div>
+<div class="rocket" id="rocket">
+<svg viewBox="0 0 56 118" fill="none">
+<path d="M28 4c11 12 17 27 17 46v38H11V50C11 31 17 16 28 4z" fill="#E3EAE6"/>
+<path d="M28 4c11 12 17 27 17 46v6H28z" fill="#CBD6D0" opacity=".55"/>
+<path d="M11 62L2 78v14l9-6z" fill="#8FDCC0"/><path d="M45 62l9 16v14l-9-6z" fill="#8FDCC0"/>
+<circle cx="28" cy="44" r="9.6" fill="#0E1210"/>
+<path d="M19 88h18l-3 12H22z" fill="#3A4A3D"/>
+<path d="M22 100h12v4H22z" fill="#2A3630"/>
+</svg>
+<img class="rk-logo" src="../../brand/saymyfood-mark.png" alt="">
+</div></div>
+</div></main>
+<footer><div class="wrap ft">
+<span style="display:flex;align-items:center;gap:9px"><span class="mark nosheen" style="width:18px;height:18px"><img src="../../brand/saymyfood-mark.png" alt=""></span>© 2026 SayMyFood</span>
+<span class="ft-links"><a href="../../index.html">Home</a><a href="../../privacy.html">Privacy</a><a href="../../terms.html">Terms</a><a href="mailto:saymyfood@gmail.com">Contact</a></span>
+</div></footer>
+<script>(()=>{
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const st=document.getElementById('stage'),cv=document.getElementById('fx'),x=cv.getContext('2d'),rk=document.getElementById('rocket'),heat=document.getElementById('heat');
+let W=0,H=0,dpr=1,P=[],last=performance.now(),acc=0,launch=null;
+function size(){const r=st.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0)}
+size();addEventListener('resize',size);
+function nozzle(){const r=rk.getBoundingClientRect(),s=st.getBoundingClientRect();return{x:r.left-s.left+r.width/2,y:r.top-s.top+r.height*.88,w:r.width}}
+const warm=['#F0913E','#E3C34A','#F6B26B','#FFD98A'];
+function ember(n,o){const nz=nozzle();for(let i=0;i<n;i++){const a=(Math.random()-.5)*(o?1.6:.9),sp=o?(60+Math.random()*160):(14+Math.random()*26);
+P.push({x:nz.x+(Math.random()-.5)*nz.w*.3,y:nz.y,vx:Math.sin(a)*sp*(o?.35:1),vy:Math.cos(a)*sp,life:0,max:o?(.35+Math.random()*.5):(.6+Math.random()*.6),r:o?(1+Math.random()*1.8):(.8+Math.random()*.8),c:warm[Math.random()*4|0],al:o?.9:.55})}}
+function frame(t){const dt=Math.min(.05,(t-last)/1000);last=t;
+x.clearRect(0,0,W,H);
+if(!RM){acc+=dt;const rate=launch?0.006:0.22;while(acc>rate){acc-=rate;if(launch&&launch.t<1)ember(3,true);else if(!launch)ember(1,false)}}
+for(let i=P.length-1;i>=0;i--){const p=P[i];p.life+=dt;if(p.life>p.max){P.splice(i,1);continue}
+p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=40*dt;p.vx*=.98;const k=1-p.life/p.max;
+x.globalAlpha=p.al*k;x.fillStyle=p.c;x.beginPath();x.arc(p.x,p.y,p.r*(0.6+0.4*k),0,7);x.fill()}
+x.globalAlpha=1;
+if(launch){const dur=1.25;launch.t=Math.min(1,(t-launch.t0)/1000/dur);const u=launch.t;
+const rise=H+220;
+const e=u<.2?Math.pow(u/.2,2)*.04:.04+.96*Math.pow((u-.2)/.8,2.5);
+rk.style.opacity=String(Math.max(0,Math.min(1,(1-u)*4)));
+rk.style.transform='translateY('+(-rise*e)+'px)';
+heat.style.opacity=String(Math.max(0,1-u*4));heat.style.animation='none';
+if(u>=1&&P.length===0){rk.style.opacity='0'}}
+requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+window.SMF_LAUNCH=function(){if(RM){rk.style.transition='opacity .4s';rk.style.opacity='0';return 500}
+if(navigator.vibrate)try{navigator.vibrate(12)}catch(e){}
+ember(70,true);launch={t0:performance.now(),t:0,vx:0};return 1400}
+})();</script>
+<script type="module" src="shared.js"></script>
+</body>
+</html>
