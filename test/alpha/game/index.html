@@ -18,6 +18,9 @@ body{--zone:clamp(144px,16vw,168px);--pad:8px;--gap:8px;
 --zw:calc(var(--zone) - var(--pad) * 2);--half:calc((var(--zw) - var(--gap)) / 2);
 --rsv:min(calc(var(--half) + var(--gap) + 44px),24vh);--rsv:min(calc(var(--half) + var(--gap) + 44px),24dvh);
 --bar:clamp(48px,11vh,84px);--bar:clamp(48px,11dvh,84px);--throw:clamp(56px,var(--zw),96px);
+/* The band at the bottom of every overlay that stays free of anything pressable.
+   It shrinks with the viewport, so a very short phone loses band before it loses box. */
+--band:min(120px,26vh);--band:min(120px,26dvh);
 margin:0;background:#161616;color:var(--tx);font-family:var(--font);display:flex;flex-direction:column;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 .top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;gap:10px;flex-shrink:0}
 .top a{display:flex;align-items:center;gap:8px;color:var(--tx2);text-decoration:none;font-size:13px;font-weight:600}
@@ -163,6 +166,23 @@ grid-template-areas:"head close" "list list" "note note"}
 .rwlist{display:grid;grid-template-columns:1fr 1fr;margin:0 0 8px}
 .rwlist div{font-size:11.5px;padding:5px 10px}
 .rwlist div:nth-last-child(-n+2){border-bottom:0}
+}
+/* Chrome for Android paints its own "To exit full screen, drag from the top" toast at
+   the BOTTOM CENTRE of the screen, over the page, for about three seconds after
+   fullscreen begins. It is not ours - it cannot be removed, moved or hurried - and on
+   the owner's phone it landed on Start, so the game could not be started until it went
+   away. The answer is to put nothing pressable there. The band is bottom padding on the
+   overlay, which is the scroller: the box centres in what is left, so every button on
+   every screen rises with it - Start, Save, Play again, Close, Next round and Resume.
+   Degrading: the band is 26dvh until that exceeds 120px, so a short viewport gives up
+   band before it gives up box; and if a box is taller than what remains it scrolls, with
+   the band still below it as runway rather than as a place a resting button can sit. */
+@media(pointer:coarse) and (orientation:landscape){
+.ov{padding-bottom:var(--band)}
+/* Start is the one thing to do on the intro screen and should read as the one thing:
+   larger, and at the top of its own area rather than settled at the bottom of it. */
+#play{padding:14px 22px;font-size:16px;border-radius:14px}
+#ov-intro .row{align-self:start}
 }
 @media(pointer:coarse) and (orientation:portrait){.rot{display:flex}.arena,.top{visibility:hidden}}
 </style>
