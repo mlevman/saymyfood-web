@@ -65,6 +65,7 @@ canvas{display:block;width:100%;height:100%}
 .keys{font-size:12px;color:var(--tx3);text-align:center;padding:6px 0 10px;flex-shrink:0}
 .rot{display:none;position:absolute;inset:0;z-index:4;background:#161616;color:var(--tx2);align-items:center;justify-content:center;text-align:center;padding:30px;font-size:15px;line-height:1.5}
 .rot svg{display:block;margin:0 auto 14px;stroke:var(--mint);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rot small{display:block;margin-top:12px;color:var(--tx3);font-size:13px}
 @media(pointer:coarse){.pad{display:flex}.keys{display:none}.top{padding:6px 10px}.arena{padding:0 6px 6px}.frame{width:min(100%,calc((100dvh - 60px) * 16 / 9))}.frame:has(.ov:not([hidden])) .pad{display:none}}
 @media(pointer:coarse) and (orientation:portrait){.rot{display:flex}.arena,.top{visibility:hidden}}
 </style>
@@ -107,12 +108,16 @@ canvas{display:block;width:100%;height:100%}
 <h2 id="t-board"></h2><div class="list" id="list"></div><p class="note" id="b-note"></p>
 <div class="row"><button class="ghost" id="b-close"></button></div>
 </div></div>
+<div class="ov" id="ov-pause" hidden><div class="box">
+<h2 id="t-pause-h"></h2>
+<div class="row"><button class="btn" id="pz-resume"></button></div>
+</div></div>
 <div class="pad" id="pad">
 <div class="grp"><button data-k="left">◀</button><button data-k="right">▶</button></div>
 <div class="grp"><button data-k="gather" id="p-gather"></button><button data-k="throw" class="thr" id="p-throw"></button></div>
 </div>
 </div></div>
-<div class="rot" id="rot"><div><svg width="44" height="44" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"></rect><path d="M20 8a8 8 0 0 1 2 5M4 16a8 8 0 0 1-2-5"></path></svg><span id="t-rot"></span></div></div>
+<div class="rot" id="rot"><div><svg width="44" height="44" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"></rect><path d="M20 8a8 8 0 0 1 2 5M4 16a8 8 0 0 1-2-5"></path></svg><span id="t-rot"></span><small id="t-rot-tap" hidden></small></div></div>
 <div class="keys" id="t-keys"></div>
 <script src="art.js"></script>
 <script src="board.js"></script>
