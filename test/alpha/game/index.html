@@ -111,7 +111,18 @@ background:rgba(143,220,192,.92);color:#0F1A15;touch-action:none;-webkit-tap-hig
 .keys{font-size:12px;color:var(--tx3);text-align:center;padding:6px 0 10px;flex-shrink:0}
 .rot{display:none;position:absolute;inset:0;z-index:4;background:#161616;color:var(--tx2);align-items:center;justify-content:center;text-align:center;padding:30px;font-size:15px;line-height:1.5}
 .rot svg{display:block;margin:0 auto 14px;stroke:var(--mint);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.rot small{display:block;margin-top:12px;color:var(--tx3);font-size:13px}
+/* The only thing to press on this screen. Grey small print read as a footnote, so it
+   is now an accent-coloured box with a border: an invitation, not a caption. It is
+   still shown only where the Fullscreen API exists - ui.js unhides it - so Safari on
+   iPhone sees the rotate screen exactly as it saw it before. The [hidden] rule is what
+   makes that true: any author `display` here would otherwise beat the UA rule that
+   [hidden] relies on, and the hint would show where tapping does nothing.
+   width:fit-content keeps the box around the words while a block puts it on its own
+   line under the sentence. */
+.rot small{display:block;width:fit-content;margin:20px auto 0;padding:13px 22px;
+border:1px solid var(--mint);border-radius:14px;background:var(--mint-dim);
+color:var(--mint);font:700 16.5px/1.3 var(--font)}
+.rot small[hidden]{display:none}
 @media(pointer:coarse){.keys{display:none}.touchhint{display:block;margin:8px 0 0}.top{padding:6px 10px}.arena{padding:0 6px 6px}.frame{width:min(100%,calc((100vh - 60px) * 16 / 9));width:min(100%,calc((100dvh - 60px) * 16 / 9))}}
 /* The zones sit in the margins, so the arena is padded by exactly their width and
    the frame centres in what is left. The field never ends up under a control. */
