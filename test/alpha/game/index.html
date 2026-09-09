@@ -17,7 +17,7 @@ body{--zone:clamp(144px,16vw,168px);--pad:8px;--gap:8px;
    play area to it; --bar is the gather bar. Every one of them clears 44px. */
 --zw:calc(var(--zone) - var(--pad) * 2);--half:calc((var(--zw) - var(--gap)) / 2);
 --rsv:min(calc(var(--half) + var(--gap) + 44px),24vh);--rsv:min(calc(var(--half) + var(--gap) + 44px),24dvh);
---bar:clamp(48px,11vh,84px);--bar:clamp(48px,11dvh,84px);--throw:min(calc(var(--zone) - 34px),104px);
+--bar:clamp(48px,11vh,84px);--bar:clamp(48px,11dvh,84px);--throw:clamp(56px,var(--zw),96px);
 margin:0;background:#161616;color:var(--tx);font-family:var(--font);display:flex;flex-direction:column;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 .top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;gap:10px;flex-shrink:0}
 .top a{display:flex;align-items:center;gap:8px;color:var(--tx2);text-decoration:none;font-size:13px;font-weight:600}
@@ -94,9 +94,13 @@ display:flex;align-items:center;justify-content:center;border-radius:16px;border
 background:rgba(21,26,24,.78);color:var(--tx);font:700 20px var(--font);line-height:1;
 touch-action:none;-webkit-tap-highlight-color:transparent;backdrop-filter:blur(3px)}
 .zone.l button.act{background:var(--mint-dim);border-color:var(--mint)}
-.zone.r{right:0;align-items:center;justify-content:center}
-.thr{width:var(--throw);height:var(--throw);min-width:44px;min-height:44px;padding:0;cursor:pointer;
-display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;
+/* The right zone keeps its width. It is not cut down to one button: from round four
+   on the game gains further actions and this is where they will live. Throw sits at
+   the BOTTOM and that is permanent - the 1fr row above it is held open and drawn
+   empty, so a button added there later does not move throw out from under the thumb. */
+.zone.r{right:0;grid-template-rows:1fr auto}
+.thr{width:var(--throw);height:var(--throw);min-width:44px;min-height:44px;padding:0;cursor:pointer;justify-self:center;
+display:flex;align-items:center;justify-content:center;border:0;border-radius:24px;
 background:rgba(143,220,192,.92);color:#0F1A15;touch-action:none;-webkit-tap-highlight-color:transparent}
 .thr svg{width:58%;height:58%;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .thr.act{filter:brightness(1.14);transform:scale(.96)}
@@ -108,7 +112,7 @@ background:rgba(143,220,192,.92);color:#0F1A15;touch-action:none;-webkit-tap-hig
 @media(pointer:coarse){.keys{display:none}.touchhint{display:block;margin:8px 0 0}.top{padding:6px 10px}.arena{padding:0 6px 6px}.frame{width:min(100%,calc((100vh - 60px) * 16 / 9));width:min(100%,calc((100dvh - 60px) * 16 / 9))}}
 /* The zones sit in the margins, so the arena is padded by exactly their width and
    the frame centres in what is left. The field never ends up under a control. */
-@media(pointer:coarse) and (orientation:landscape){.arena{padding:0 var(--zone) 6px}.zone.l{display:grid}.zone.r{display:flex}}
+@media(pointer:coarse) and (orientation:landscape){.arena{padding:0 var(--zone) 6px}.zone.l,.zone.r{display:grid}}
 /* No live controls while a screen is up. Wins on specificity, whatever the order. */
 .arena:has(.ov:not([hidden])) .zone{display:none}
 /* Short landscape - a phone, with or without fullscreen. The overlay is wide and
@@ -216,7 +220,9 @@ grid-template-areas:"head close" "list list" "note note"}
 <div class="row"><button class="btn" id="pz-resume"></button></div>
 </div></div>
 </div>
-<div class="zone r"><button class="thr" data-k="throw" id="p-throw"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 33.5C8.5 21 18 12.6 28.5 10.2" stroke-dasharray="3.5 4.5"/><circle cx="30.6" cy="10.4" r="5.6" fill="currentColor" stroke="none"/><path d="M30.6 4.8V2.4"/></svg></button></div>
+<div class="zone r">
+<div class="rsv" aria-hidden="true"></div>
+<button class="thr" data-k="throw" id="p-throw"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 33.5C8.5 21 18 12.6 28.5 10.2" stroke-dasharray="3.5 4.5"/><circle cx="30.6" cy="10.4" r="5.6" fill="currentColor" stroke="none"/><path d="M30.6 4.8V2.4"/></svg></button></div>
 </div>
 <div class="rot" id="rot"><div><svg width="44" height="44" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"></rect><path d="M20 8a8 8 0 0 1 2 5M4 16a8 8 0 0 1-2-5"></path></svg><span id="t-rot"></span><small id="t-rot-tap" hidden></small></div></div>
 <div class="keys" id="t-keys"></div>
