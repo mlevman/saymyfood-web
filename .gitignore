@@ -1,0 +1,15 @@
+# Task files. Never committed: an identically named prompt.md lives in the
+# NutrientAI app repository, and on 2026-09-09 a task was pasted into the wrong
+# project and run with stale text. Different file names are the barrier.
+prompt-web.md
+prompt.md
+
+# Run journal and unattended-run output.
+RUN_LOG.md
+night_logs/
+attempt_*.log
+
+# Tooling and OS noise.
+.claude/
+.DS_Store
+Thumbs.db
