@@ -10,10 +10,16 @@ const V0=260,MAXA=5,MAXHP=5,GATHER_T=.5,TREE_L=64,TREE_R=896,GZONE=95;
 // explicit reward table. clashCap: paid clashes per round - the capping one doubles the round's
 // clash points (clashBonus), every clash after it destroys apples but pays nothing.
 const AW={hit:200,clash:50,clashCap:20,clashBonus:2,heart:200,round:[500,700,1000],speed:15,speedFrom:120};
+// Seeded RNG (mulberry32), held in state and seeded when a game starts. The seed
+// is kept so a run could later be sent with its result. `rng` drives the
+// simulation; `vrng` drives draw-time-only effects, which tick at the display's
+// refresh rate and so must not disturb the simulation's stream.
+function mulberry32(a){return()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function newSeed(){const c=globalThis.crypto;if(c&&c.getRandomValues){const a=new Uint32Array(1);c.getRandomValues(a);return a[0]>>>0}return(Date.now()^(performance.now()*65536))>>>0}
 let cv,x,S=null,cb={},raf=0,last=0;
 const input={left:false,right:false,gather:false,throw:false};
 function mk(side,kind,hard){return{side,kind,hard:!!hard,x:side<0?200:760,hp:MAXHP,apples:MAXA,face:-side,walk:0,moving:false,gather:0,gathering:false,charge:-1,hurt:0,cool:0,ai:{t:0,target:null,want:0,thinkT:0}}}
-function newGame(hero,hard){S={hero,hard:!!hard,level:0,total:0,t:0,lvT:0,p:mk(-1,hero,hard),e:mk(1,'redneck'),apples:[],fx:[],over:false,pause:false,shake:0,msg:null};lvl()}
+function newGame(hero,hard){const seed=newSeed();S={hero,hard:!!hard,seed,rng:mulberry32(seed),vrng:mulberry32((seed^0x9E3779B9)>>>0),level:0,total:0,t:0,lvT:0,p:mk(-1,hero,hard),e:mk(1,'redneck'),apples:[],fx:[],over:false,pause:false,shake:0,msg:null};lvl()}
 function lvl(){const s=S;s.p.x=200;s.e.x=760;if(!(s.hard&&s.level>0))s.p.hp=MAXHP;s.e.hp=MAXHP;s.p.apples=MAXA;s.e.apples=MAXA;s.p.charge=-1;s.e.charge=-1;s.apples=[];s.fx=[];s.lvT=0;s.lvEarned=0;s.clashes=0;s.pause=false;s.over=false;s.e.ai={t:0,target:null,want:0,thinkT:0}}
 function throwApple(c,pow){const spd=V0+(HERO[c.kind].vmax-V0)*pow,f=c.face;
 S.apples.push({x:c.x+f*14,y:GY-80,y0:GY-80,vx:Math.cos(ANG)*spd*f,vy:Math.sin(ANG)*spd,rot:0,from:c.side,dead:0,age:0});c.apples--;c.cool=.35}
@@ -36,14 +42,14 @@ if(wantThrow&&c.apples>0&&c.cool<=0){c.face=-c.side;c.charge=c.charge<0?0:Math.m
 else if(c.charge>=0){throwApple(c,c.charge);c.charge=-1}}
 function ai(dt){const e=S.e,p=S.p,L=LV[S.level],a=e.ai;a.thinkT-=dt;
 if(a.thinkT<=0){a.thinkT=L.react;
-if(e.apples===0||(e.apples<2&&Math.random()<.5&&e.x>TREE_R-GZONE)) a.want=1; // go gather
-else if(e.apples>=MAXA||(a.want===1&&e.apples>=3&&Math.random()<.35)) a.want=2; // fight
+if(e.apples===0||(e.apples<2&&S.rng()<.5&&e.x>TREE_R-GZONE)) a.want=1; // go gather
+else if(e.apples>=MAXA||(a.want===1&&e.apples>=3&&S.rng()<.35)) a.want=2; // fight
 if(a.want===0)a.want=2;
 // pick a spot: fight spot keeps distance to player ~ what a mid power throw reaches; add jitter
-if(a.want===2){const d=380+Math.random()*180;a.target=Math.max(FX+60,Math.min(TREE_R-60,p.x+d))}else a.target=TREE_R-44-Math.random()*30;
+if(a.want===2){const d=380+S.rng()*180;a.target=Math.max(FX+60,Math.min(TREE_R-60,p.x+d))}else a.target=TREE_R-44-S.rng()*30;
 // power is chosen when charging starts (see below), not here
 // dodge: if an apple is inbound and close, sidestep
-a.dodge=0;if(e.charge<0)for(const ap of S.apples)if(ap.from<0&&Math.abs(ap.x-e.x)<180&&Math.random()<(S.level*.28+.18))a.dodge=ap.vx>0?1:-1}
+a.dodge=0;if(e.charge<0)for(const ap of S.apples)if(ap.from<0&&Math.abs(ap.x-e.x)<180&&S.rng()<(S.level*.28+.18))a.dodge=ap.vx>0?1:-1}
 let dir=0;const dx=a.target-e.x;if(Math.abs(dx)>10)dir=Math.sign(dx);if(a.dodge)dir=a.dodge;
 const gather=a.want===1&&Math.abs(dx)<=12;
 let thr=false;
@@ -51,7 +57,7 @@ if(e.charge>=0){thr=e.charge<a.pow;dir=0} // committed: finish the charge regard
 else if(a.want===2&&Math.abs(dx)<=14&&e.apples>0&&e.cool<=0){
 // aim now, from the real distance. Compensate the 76px drop + spawn offset: solve v for range r with launch height h:
 // r = vx*t, h + vy*t - g t^2/2 = 0  ->  iterate on the flat-ground estimate
-const h=76,r=Math.abs(e.x-p.x)-36+(Math.random()-.5)*2*L.err;let v=VMAX(Math.max(60,r));
+const h=76,r=Math.abs(e.x-p.x)-36+(S.rng()-.5)*2*L.err;let v=VMAX(Math.max(60,r));
 for(let i=0;i<3;i++){const vx=Math.cos(ANG)*v,vy=-Math.sin(ANG)*v,t=(vy+Math.sqrt(vy*vy+2*G*h))/G,rr=vx*t;v*=Math.sqrt(Math.max(.3,r/rr))}
 a.pow=Math.max(.02,Math.min(1,(v-V0)/(HERO.redneck.vmax-V0)));thr=true}
 stepChar(e,dt,thr?0:dir,gather,thr,L.speed)}
@@ -65,12 +71,12 @@ if(Math.hypot(a.x-b.x,a.y-b.y)<22){a.dead=b.dead=.001;const mx=(a.x+b.x)/2,my=(a
 // The apples always destroy each other; only the points stop. The capping clash doubles the round's clash points.
 S.clashes++;if(S.clashes<AW.clashCap)award(AW.clash,mx,my-14,'#F6E7A0');
 else if(S.clashes===AW.clashCap){const cbase=AW.clashCap*AW.clash,ctot=cbase*AW.clashBonus;add(AW.clash+ctot-cbase);S.fx.push({x:mx,y:my,t:0,kind:'clashx',base:cbase,tot:ctot})}
-for(let k=0;k<10;k++){const an=Math.random()*6.28,sp=90+Math.random()*160;S.fx.push({x:mx,y:my,vx:Math.cos(an)*sp,vy:Math.sin(an)*sp-80,t:0,kind:'chunk',r:3+Math.random()*4})}}}}
+for(let k=0;k<10;k++){const an=S.rng()*6.28,sp=90+S.rng()*160;S.fx.push({x:mx,y:my,vx:Math.cos(an)*sp,vy:Math.sin(an)*sp-80,t:0,kind:'chunk',r:3+S.rng()*4})}}}}
 S.apples=S.apples.filter(a=>a.dead<.4);S.fx=S.fx.filter(f=>{f.t+=dt;if(f.kind==='chunk'){f.vy+=G*dt;f.x+=f.vx*dt;f.y+=f.vy*dt}return f.t<(f.kind==='chunk'?.9:f.kind==='score'?1.1:f.kind==='clashx'?1.8:.5)})}
 function update(dt){if(!S||S.pause)return;S.t+=dt;S.lvT+=dt;S.shake=Math.max(0,S.shake-dt);
 const dir=(input.right?1:0)-(input.left?1:0);stepChar(S.p,dt,dir,input.gather,input.throw,HERO[S.hero].speed);ai(dt);stepApples(dt)}
 function draw(){const s=S;x.save();x.clearRect(0,0,W,H);
-if(s&&s.shake>0)x.translate((Math.random()-.5)*s.shake*14,(Math.random()-.5)*s.shake*10);
+if(s&&s.shake>0)x.translate((s.vrng()-.5)*s.shake*14,(s.vrng()-.5)*s.shake*10);
 ART.sky(x,W,H,GY);ART.ground(x,W,GY);ART.fence(x,FX,GY,FH);
 if(!s){x.restore();return}
 ART.tree(x,TREE_L,GY,8,s.p.gathering);ART.tree(x,TREE_R,GY,8,s.e.gathering);
