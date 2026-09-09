@@ -8,7 +8,8 @@
 <link rel="stylesheet" href="../../../site.css">
 <style>
 html,body{height:100%}
-body{margin:0;background:#161616;color:var(--tx);font-family:var(--font);display:flex;flex-direction:column;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+body{--zone:clamp(144px,16vw,168px);--cell:calc((var(--zone) - 12px) / 3);--throw:min(calc(var(--zone) - 34px),104px);
+margin:0;background:#161616;color:var(--tx);font-family:var(--font);display:flex;flex-direction:column;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 .top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;gap:10px;flex-shrink:0}
 .top a{display:flex;align-items:center;gap:8px;color:var(--tx2);text-decoration:none;font-size:13px;font-weight:600}
 .top a:hover{color:var(--tx)}
@@ -58,17 +59,40 @@ canvas{display:block;width:100%;height:100%}
 .rwlist div{display:flex;justify-content:space-between;gap:14px;padding:8px 13px;font-size:13.5px;border-bottom:1px solid var(--hair)}
 .rwlist div:last-child{border-bottom:0}.rwlist b{color:var(--mint);font-variant-numeric:tabular-nums;white-space:nowrap}
 .rwlist div.x2 b{color:#F2717A}
-.pad{display:none;position:absolute;left:0;right:0;bottom:0;padding:0 10px 10px;gap:8px;justify-content:space-between;align-items:flex-end;pointer-events:none;z-index:2}
-.pad .grp{display:flex;gap:8px;pointer-events:auto}
-.pad button{min-width:58px;height:54px;border-radius:14px;border:1px solid var(--hair2);background:rgba(21,26,24,.78);color:var(--tx);font:700 13px var(--font);touch-action:none;-webkit-tap-highlight-color:transparent;backdrop-filter:blur(3px)}
-.pad button.act{background:var(--mint-dim);border-color:var(--mint)}
-.pad .thr{min-width:92px;background:rgba(143,220,192,.9);color:#0F1A15;border-color:transparent}
-.pad .thr.act{filter:brightness(1.12)}
+/* On-screen controls. Landscape only, and only in the black margins beside the
+   16:9 field: the whole fight happens in the bottom third of the field, so any
+   control drawn over the canvas covers the game. */
+.zone{display:none;position:absolute;top:0;bottom:0;width:var(--zone);z-index:2;
+touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+/* Row 1 is empty on purpose - reserved room for movement buttons that do not exist
+   yet. Holding the space here means adding them later will not move the D-pad. */
+.zone.l{left:0;grid-template-rows:var(--cell) auto;gap:12px;justify-items:center;align-content:center}
+.zone.r{right:0;align-items:center;justify-content:center}
+/* 3x3. Only left, right and down are drawn. Up and the centre reserve their cells
+   and draw nothing, so there is no dimmed control to press with no effect. */
+.dpad{display:grid;grid-template-columns:repeat(3,var(--cell));grid-template-rows:repeat(3,var(--cell))}
+.dpad button{min-width:44px;min-height:44px;width:100%;height:100%;padding:0;cursor:pointer;
+display:flex;align-items:center;justify-content:center;border-radius:14px;border:1px solid var(--hair2);
+background:rgba(21,26,24,.78);color:var(--tx);font:700 18px var(--font);line-height:1;
+touch-action:none;-webkit-tap-highlight-color:transparent;backdrop-filter:blur(3px)}
+.dpad .dl{grid-area:2/1}.dpad .dr{grid-area:2/3}.dpad .dd{grid-area:3/2}
+.dpad button.act{background:var(--mint-dim);border-color:var(--mint)}
+.thr{width:var(--throw);height:var(--throw);min-width:44px;min-height:44px;padding:0;cursor:pointer;
+display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;
+background:rgba(143,220,192,.92);color:#0F1A15;touch-action:none;-webkit-tap-highlight-color:transparent}
+.thr svg{width:58%;height:58%;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.thr.act{filter:brightness(1.14);transform:scale(.96)}
+.touchhint{display:none}
 .keys{font-size:12px;color:var(--tx3);text-align:center;padding:6px 0 10px;flex-shrink:0}
 .rot{display:none;position:absolute;inset:0;z-index:4;background:#161616;color:var(--tx2);align-items:center;justify-content:center;text-align:center;padding:30px;font-size:15px;line-height:1.5}
 .rot svg{display:block;margin:0 auto 14px;stroke:var(--mint);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .rot small{display:block;margin-top:12px;color:var(--tx3);font-size:13px}
-@media(pointer:coarse){.pad{display:flex}.keys{display:none}.top{padding:6px 10px}.arena{padding:0 6px 6px}.frame{width:min(100%,calc((100vh - 60px) * 16 / 9));width:min(100%,calc((100dvh - 60px) * 16 / 9))}.frame:has(.ov:not([hidden])) .pad{display:none}}
+@media(pointer:coarse){.keys{display:none}.touchhint{display:block;margin:8px 0 0}.top{padding:6px 10px}.arena{padding:0 6px 6px}.frame{width:min(100%,calc((100vh - 60px) * 16 / 9));width:min(100%,calc((100dvh - 60px) * 16 / 9))}}
+/* The zones sit in the margins, so the arena is padded by exactly their width and
+   the frame centres in what is left. The field never ends up under a control. */
+@media(pointer:coarse) and (orientation:landscape){.arena{padding:0 var(--zone) 6px}.zone.l{display:grid}.zone.r{display:flex}}
+/* No live controls while a screen is up. Wins on specificity, whatever the order. */
+.arena:has(.ov:not([hidden])) .zone{display:none}
 @media(pointer:coarse) and (orientation:portrait){.rot{display:flex}.arena,.top{visibility:hidden}}
 </style>
 </head>
@@ -77,7 +101,13 @@ canvas{display:block;width:100%;height:100%}
 <a href="../index.html" id="back"><span class="mark nosheen"><img src="../../../brand/saymyfood-mark.png" alt=""></span><span id="t-back">← Back to the request</span></a>
 <button class="brd" id="brd">Leaderboard</button>
 </div>
-<div class="arena"><div class="frame">
+<div class="arena">
+<div class="zone l"><div class="dpad">
+<button class="dl" data-k="left">◀</button>
+<button class="dr" data-k="right">▶</button>
+<button class="dd" data-k="gather" id="p-gather">▼</button>
+</div></div>
+<div class="frame">
 <canvas id="cv" width="960" height="540"></canvas>
 <div class="ov" id="ov-intro"><div class="box">
 <h2 id="t-intro-h"></h2><p id="t-intro-p"></p>
@@ -88,6 +118,7 @@ canvas{display:block;width:100%;height:100%}
 <label class="hard"><input type="checkbox" id="hard"><span><b id="t-hard"></b><small id="t-hard-s"></small></span></label>
 <div class="row"><button class="btn" id="play"></button></div>
 <p class="note" id="t-how" style="margin:8px 0 0"></p>
+<p class="note touchhint" id="t-keys-touch"></p>
 <button class="lnk" id="rw-open"></button>
 </div></div>
 <div class="ov" id="ov-clear" hidden><div class="box">
@@ -114,11 +145,9 @@ canvas{display:block;width:100%;height:100%}
 <h2 id="t-pause-h"></h2>
 <div class="row"><button class="btn" id="pz-resume"></button></div>
 </div></div>
-<div class="pad" id="pad">
-<div class="grp"><button data-k="left">◀</button><button data-k="right">▶</button></div>
-<div class="grp"><button data-k="gather" id="p-gather"></button><button data-k="throw" class="thr" id="p-throw"></button></div>
 </div>
-</div></div>
+<div class="zone r"><button class="thr" data-k="throw" id="p-throw"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 33.5C8.5 21 18 12.6 28.5 10.2" stroke-dasharray="3.5 4.5"/><circle cx="30.6" cy="10.4" r="5.6" fill="currentColor" stroke="none"/><path d="M30.6 4.8V2.4"/></svg></button></div>
+</div>
 <div class="rot" id="rot"><div><svg width="44" height="44" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"></rect><path d="M20 8a8 8 0 0 1 2 5M4 16a8 8 0 0 1-2-5"></path></svg><span id="t-rot"></span><small id="t-rot-tap" hidden></small></div></div>
 <div class="keys" id="t-keys"></div>
 <script src="art.js"></script>
