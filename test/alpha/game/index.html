@@ -54,10 +54,12 @@ canvas{display:block;width:100%;height:100%}
 .list div.me .pf{color:var(--tx2)}.list span:first-child{color:var(--tx3)}.list span:last-child{font-weight:700}
 #e-list{max-height:min(34vh,210px);max-height:min(34dvh,210px)}
 .note{font-size:12px;color:var(--tx3);margin:0 0 12px}
+#t-how{margin:8px 0 0}
 .lnk{background:none;border:0;padding:4px 0 0;color:var(--mint);font:600 12.5px var(--font);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .rwlist{text-align:left;border:1px solid var(--hair);border-radius:12px;margin:0 0 14px}
-.rwlist div{display:flex;justify-content:space-between;gap:14px;padding:8px 13px;font-size:13.5px;border-bottom:1px solid var(--hair)}
-.rwlist div:last-child{border-bottom:0}.rwlist b{color:var(--mint);font-variant-numeric:tabular-nums;white-space:nowrap}
+.rwlist div{display:flex;align-items:baseline;justify-content:space-between;gap:14px;padding:8px 13px;font-size:13.5px;border-bottom:1px solid var(--hair)}
+.rwlist div:last-child{border-bottom:0}.rwlist b{color:var(--mint);font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0}
+.rwlist span{min-width:0;overflow-wrap:anywhere}
 .rwlist div.x2 b{color:#F2717A}
 /* On-screen controls. Landscape only, and only in the black margins beside the
    16:9 field: the whole fight happens in the bottom third of the field, so any
@@ -93,6 +95,55 @@ background:rgba(143,220,192,.92);color:#0F1A15;touch-action:none;-webkit-tap-hig
 @media(pointer:coarse) and (orientation:landscape){.arena{padding:0 var(--zone) 6px}.zone.l{display:grid}.zone.r{display:flex}}
 /* No live controls while a screen is up. Wins on specificity, whatever the order. */
 .arena:has(.ov:not([hidden])) .zone{display:none}
+/* Short landscape - a phone, with or without fullscreen. The overlay is wide and
+   not tall, so: two columns where a column actually buys height, smaller type,
+   and the box is allowed to use the width it has. Desktop never sees any of this. */
+@media (orientation:landscape) and (max-height:520px){
+.box{max-width:none}
+.box h2{font-size:16.5px;margin:0 0 3px}
+.box p{font-size:11.5px;line-height:1.35;margin:0 0 5px}
+.note{font-size:10.5px;margin:0 0 6px}
+.box .btn{padding:8px 16px;font-size:12.5px;min-width:0}
+.box .ghost{padding:7px 14px;font-size:12.5px}
+.row{gap:8px}
+.big{font-size:30px;margin:0 0 4px}
+.list div{font-size:12.5px;padding:5px 10px}
+/* intro: what this is on the left, what to choose on the right. The left column
+   is the shorter one, so the long paragraph costs no height at all. */
+#ov-intro .box{display:grid;grid-template-columns:1.05fr 1fr;gap:0 16px;text-align:left;align-content:center;
+grid-template-areas:"head heroes" "intro heroes" "how hard" "hint play" "rw play"}
+#t-intro-h{grid-area:head}#t-intro-p{grid-area:intro}
+#t-how{grid-area:how;margin:0 0 4px}#t-keys-touch{grid-area:hint}#rw-open{grid-area:rw;justify-self:start}
+.heroes{grid-area:heroes;grid-template-columns:1fr;gap:6px;margin:0}
+.hero canvas{height:44px}
+.hero b{font-size:12.5px}.hero small{font-size:10.5px;margin-top:1px}
+.hard{grid-area:hard;margin:0 0 6px;padding:6px 10px}
+.hard b{font-size:12.5px}.hard small{font-size:10.5px}
+#ov-intro .row{grid-area:play}
+#ov-intro .row .btn{width:100%}
+/* end: the result on the left, saving and the board window on the right */
+#ov-end .box{display:grid;grid-template-columns:1fr 1.15fr;gap:0 16px;align-content:center;
+grid-template-areas:"head name" "text rank" "score list" "btns list"}
+#e-h{grid-area:head}#e-p{grid-area:text}#e-score{grid-area:score}
+.name{grid-area:name;margin:0 0 6px}
+.name input{padding:7px 10px;font-size:13px}
+#e-rank{grid-area:rank}
+#e-list{grid-area:list;margin:0;max-height:min(40vh,132px);max-height:min(40dvh,132px)}
+#ov-end .row{grid-area:btns}
+/* board: the heading and Close share a row, so the height goes to the list */
+#ov-board .box{display:grid;grid-template-columns:1fr auto;gap:0 12px;
+grid-template-areas:"head close" "list list" "note note"}
+#t-board{grid-area:head;align-self:center;text-align:left}
+#ov-board .row{grid-area:close}
+#list{grid-area:list;margin:0 0 6px;max-height:min(52vh,190px);max-height:min(52dvh,190px)}
+#b-note{grid-area:note;margin:0}
+/* round summary and the scoring table: no column to gain, just less height */
+.stats{font-size:12px;gap:2px 16px;margin:0 0 8px}
+.stats .x2{font-size:11.5px}
+.rwlist{display:grid;grid-template-columns:1fr 1fr;margin:0 0 8px}
+.rwlist div{font-size:11.5px;padding:5px 10px}
+.rwlist div:nth-last-child(-n+2){border-bottom:0}
+}
 @media(pointer:coarse) and (orientation:portrait){.rot{display:flex}.arena,.top{visibility:hidden}}
 </style>
 </head>
@@ -117,7 +168,7 @@ background:rgba(143,220,192,.92);color:#0F1A15;touch-action:none;-webkit-tap-hig
 </div>
 <label class="hard"><input type="checkbox" id="hard"><span><b id="t-hard"></b><small id="t-hard-s"></small></span></label>
 <div class="row"><button class="btn" id="play"></button></div>
-<p class="note" id="t-how" style="margin:8px 0 0"></p>
+<p class="note" id="t-how"></p>
 <p class="note touchhint" id="t-keys-touch"></p>
 <button class="lnk" id="rw-open"></button>
 </div></div>
