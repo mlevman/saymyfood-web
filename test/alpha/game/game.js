@@ -19,17 +19,22 @@ function newSeed(){const c=globalThis.crypto;if(c&&c.getRandomValues){const a=ne
 let cv,x,S=null,cb={},raf=0,last=0;
 const input={left:false,right:false,gather:false,throw:false};
 function mk(side,kind,hard){return{side,kind,hard:!!hard,x:side<0?200:760,hp:MAXHP,apples:MAXA,face:-side,walk:0,moving:false,gather:0,gathering:false,charge:-1,hurt:0,cool:0,ai:{t:0,target:null,want:0,thinkT:0}}}
-function newGame(hero,hard){const seed=newSeed();S={hero,hard:!!hard,seed,rng:mulberry32(seed),vrng:mulberry32((seed^0x9E3779B9)>>>0),level:0,total:0,t:0,lvT:0,p:mk(-1,hero,hard),e:mk(1,'redneck'),apples:[],fx:[],over:false,pause:false,shake:0,msg:null};lvl()}
-function lvl(){const s=S;s.p.x=200;s.e.x=760;if(!(s.hard&&s.level>0))s.p.hp=MAXHP;s.e.hp=MAXHP;s.p.apples=MAXA;s.e.apples=MAXA;s.p.charge=-1;s.e.charge=-1;s.apples=[];s.fx=[];s.lvT=0;s.lvEarned=0;s.clashes=0;s.pause=false;s.over=false;s.e.ai={t:0,target:null,want:0,thinkT:0}}
+function newGame(hero,hard){const seed=newSeed();S={hero,hard:!!hard,seed,rounds:[],rng:mulberry32(seed),vrng:mulberry32((seed^0x9E3779B9)>>>0),level:0,total:0,t:0,lvT:0,p:mk(-1,hero,hard),e:mk(1,'redneck'),apples:[],fx:[],over:false,pause:false,shake:0,msg:null};lvl()}
+function lvl(){const s=S;s.p.x=200;s.e.x=760;if(!(s.hard&&s.level>0))s.p.hp=MAXHP;s.e.hp=MAXHP;s.p.apples=MAXA;s.e.apples=MAXA;s.p.charge=-1;s.e.charge=-1;s.apples=[];s.fx=[];s.lvT=0;s.lvEarned=0;s.clashes=0;s.hits=0;s.pause=false;s.over=false;s.e.ai={t:0,target:null,want:0,thinkT:0}}
 function throwApple(c,pow){const spd=V0+(HERO[c.kind].vmax-V0)*pow,f=c.face;
 S.apples.push({x:c.x+f*14,y:GY-80,y0:GY-80,vx:Math.cos(ANG)*spd*f,vy:Math.sin(ANG)*spd,rot:0,from:c.side,dead:0,age:0});c.apples--;c.cool=.35}
 function add(n){S.total+=n;S.lvEarned=(S.lvEarned||0)+n}
 function award(n,px,py,col){add(n);S.fx.push({x:px,y:py,t:0,kind:'score',n,col})}
-function hit(c){if(c.hurt>0)return;c.hp--;c.hurt=.9;S.shake=.25;cb.hit&&cb.hit(c.side);if(c.side>0)award(AW.hit,c.x,GY-118,ART.mint);
-if(c.hp<=0){S.over=true;S.pause=true;if(c.side>0){const time=S.lvT,left=Math.max(0,AW.speedFrom-time),bonus=Math.round(left*AW.speed),hearts=S.p.hp*AW.heart,round=AW.round[S.level],earned=S.lvEarned||0,end=round+hearts+bonus,lvScore=end+earned;S.total+=end;
+function hit(c){if(c.hurt>0)return;c.hp--;c.hurt=.9;S.shake=.25;cb.hit&&cb.hit(c.side);if(c.side>0){S.hits++;award(AW.hit,c.x,GY-118,ART.mint)}
+if(c.hp<=0){S.over=true;S.pause=true;
+// One record per finished round, in play order, so the server can recompute the score.
+// `clashes` counts only the PAID clashes: the cap-th one pays (doubled), every one after it pays nothing.
+// `time` is the same number the speed bonus is computed from, unrounded.
+S.rounds.push({hits:S.hits,clashes:Math.min(S.clashes,AW.clashCap),hearts:S.p.hp,cleared:c.side>0,time:S.lvT});
+if(c.side>0){const time=S.lvT,left=Math.max(0,AW.speedFrom-time),bonus=Math.round(left*AW.speed),hearts=S.p.hp*AW.heart,round=AW.round[S.level],earned=S.lvEarned||0,end=round+hearts+bonus,lvScore=end+earned;S.total+=end;
 const last=S.level>=2,base=S.total;if(last&&S.hard)S.total*=2;
-cb.levelClear&&cb.levelClear({level:S.level+1,time,left,bonus,hp:S.p.hp,hearts,round,earned,lvScore,total:S.total,base,hard:S.hard,last})}
-else cb.gameOver&&cb.gameOver({level:S.level+1,total:S.total,hard:S.hard})}}
+cb.levelClear&&cb.levelClear({level:S.level+1,time,left,bonus,hp:S.p.hp,hearts,round,earned,lvScore,total:S.total,base,hard:S.hard,last,rounds:S.rounds.slice()})}
+else cb.gameOver&&cb.gameOver({level:S.level+1,total:S.total,hard:S.hard,rounds:S.rounds.slice()})}}
 function stepChar(c,dt,dir,wantGather,wantThrow,speed){
 c.moving=false;c.cool=Math.max(0,c.cool-dt);c.hurt=Math.max(0,c.hurt-dt);
 const inZone=c.side<0?c.x<TREE_L+GZONE+20:c.x>TREE_R-GZONE-20;
