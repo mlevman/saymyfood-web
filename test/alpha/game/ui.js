@@ -156,4 +156,14 @@ el.addEventListener('pointerup',release);
 el.addEventListener('pointercancel',release);
 el.addEventListener('contextmenu',e=>e.preventDefault());
 el.addEventListener('dragstart',e=>e.preventDefault())});
+// The gather control teaches itself. With no apples left AND standing in the gathering
+// zone by their own tree, `down` is the only move worth making, so it gets a quiet
+// highlight - and loses it the moment either condition ends (gathering one apple ends
+// the first). It is a class on the existing button: no new element, no new line of
+// text anywhere. Both conditions come from the engine's own state - `apples` was
+// already there, and stepChar now records `inZone` on the character - so the
+// gathering-zone arithmetic is not duplicated here.
+const gEl=$('p-gather');
+setInterval(()=>{const s=GAME.state();
+gEl.classList.toggle('need',!!(s&&!s.over&&!s.pause&&s.p.apples===0&&s.p.inZone))},140);
 })();

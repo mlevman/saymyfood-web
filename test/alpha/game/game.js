@@ -18,7 +18,7 @@ function mulberry32(a){return()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a)
 function newSeed(){const c=globalThis.crypto;if(c&&c.getRandomValues){const a=new Uint32Array(1);c.getRandomValues(a);return a[0]>>>0}return(Date.now()^(performance.now()*65536))>>>0}
 let cv,x,S=null,cb={},raf=0,last=0;
 const input={left:false,right:false,gather:false,throw:false};
-function mk(side,kind,hard){return{side,kind,hard:!!hard,x:side<0?200:760,hp:MAXHP,apples:MAXA,face:-side,walk:0,moving:false,gather:0,gathering:false,charge:-1,hurt:0,cool:0,ai:{t:0,target:null,want:0,thinkT:0}}}
+function mk(side,kind,hard){return{side,kind,hard:!!hard,x:side<0?200:760,hp:MAXHP,apples:MAXA,face:-side,walk:0,moving:false,gather:0,gathering:false,inZone:false,charge:-1,hurt:0,cool:0,ai:{t:0,target:null,want:0,thinkT:0}}}
 function newGame(hero,hard){const seed=newSeed();S={hero,hard:!!hard,seed,rounds:[],rng:mulberry32(seed),vrng:mulberry32((seed^0x9E3779B9)>>>0),level:0,total:0,t:0,lvT:0,p:mk(-1,hero,hard),e:mk(1,'redneck'),apples:[],fx:[],over:false,pause:false,shake:0,msg:null};lvl()}
 function lvl(){const s=S;s.p.x=200;s.e.x=760;if(!(s.hard&&s.level>0))s.p.hp=MAXHP;s.e.hp=MAXHP;s.p.apples=MAXA;s.e.apples=MAXA;s.p.charge=-1;s.e.charge=-1;s.apples=[];s.fx=[];s.lvT=0;s.lvEarned=0;s.clashes=0;s.hits=0;s.pause=false;s.over=false;s.e.ai={t:0,target:null,want:0,thinkT:0}}
 function throwApple(c,pow){const spd=V0+(HERO[c.kind].vmax-V0)*pow,f=c.face;
@@ -38,6 +38,10 @@ else cb.gameOver&&cb.gameOver({level:S.level+1,total:S.total,hard:S.hard,rounds:
 function stepChar(c,dt,dir,wantGather,wantThrow,speed){
 c.moving=false;c.cool=Math.max(0,c.cool-dt);c.hurt=Math.max(0,c.hurt-dt);
 const inZone=c.side<0?c.x<TREE_L+GZONE+20:c.x>TREE_R-GZONE-20;
+// Read-only, for the UI: whether this character is standing in its own gathering zone.
+// The alternative was to repeat the TREE/GZONE arithmetic in ui.js, where it would
+// silently go stale the first time the field changes.
+c.inZone=inZone;
 c.gathering=wantGather&&inZone&&c.apples<MAXA&&c.charge<0;
 if(c.gathering){c.gather+=dt;c.walk+=dt*6;const need=c.side<0?GATHER_T:LV[S.level].gatherT;if(c.gather>=need){c.gather=0;c.apples++;S.fx.push({x:c.x+c.face*26,y:GY-104,t:0,kind:'pick'})}return}
 c.gather=0;

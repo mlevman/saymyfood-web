@@ -97,6 +97,14 @@ display:flex;align-items:center;justify-content:center;border-radius:16px;border
 background:rgba(21,26,24,.78);color:var(--tx);font:700 20px var(--font);line-height:1;
 touch-action:none;-webkit-tap-highlight-color:transparent;backdrop-filter:blur(3px)}
 .zone.l button.act{background:var(--mint-dim);border-color:var(--mint)}
+/* Teaching by situation instead of by text: out of apples and standing in the
+   gathering zone, so gather is the only move. A quiet ring rather than a flood of
+   colour, so it never reads as a pressed state - and it yields to .act when a finger
+   really is on it. Under reduced motion the ring is simply there, without pulsing. */
+@keyframes gneed{0%,100%{box-shadow:0 0 0 0 rgba(143,220,192,0)}50%{box-shadow:0 0 0 3px rgba(143,220,192,.42)}}
+.zone.l button.need{border-color:var(--mint);color:var(--mint);animation:gneed 1.2s ease-in-out infinite}
+.zone.l button.need.act{animation:none;box-shadow:none}
+@media(prefers-reduced-motion:reduce){.zone.l button.need{animation:none;box-shadow:0 0 0 2px rgba(143,220,192,.34)}}
 /* The right zone keeps its width. It is not cut down to one button: from round four
    on the game gains further actions and this is where they will live. Throw sits at
    the BOTTOM and that is permanent - the 1fr row above it is held open and drawn
