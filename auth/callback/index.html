@@ -89,7 +89,7 @@ const T = {
     pwShort:'At least 8 characters.', pwMismatch:'The two passwords are different.',
     pwWeak:'This password appears in known breaches. Choose another one.',
     open:'Open SayMyFood on this device',
-    openFail:'SayMyFood did not open — it may not be installed here. Nothing is lost: open the app on your phone and sign in.',
+    openFail:'SayMyFood did not open — it may not be installed on this phone. Nothing is lost: the confirmation above has already gone through. Open the app and sign in.',
     preview:'preview build',
     onPhone:'Open SayMyFood on your phone and sign in.',
     bad:'This link did not work', badP:'It may have expired or already been used. Request a new email from the app.',
@@ -105,7 +105,7 @@ const T = {
     pwShort:'Не короче 8 символов.', pwMismatch:'Пароли не совпадают.',
     pwWeak:'Этот пароль встречается в известных утечках. Выберите другой.',
     open:'Открыть SayMyFood на этом устройстве',
-    openFail:'SayMyFood не открылся — возможно, он здесь не установлен. Ничего не потеряно: откройте приложение на телефоне и войдите.',
+    openFail:'SayMyFood не открылся — возможно, он не установлен на этом телефоне. Ничего не потеряно: подтверждение выше уже прошло. Откройте приложение и войдите.',
     preview:'preview-сборка',
     onPhone:'Откройте SayMyFood на телефоне и войдите.',
     bad:'Ссылка не сработала', badP:'Возможно, истёк срок или ей уже воспользовались. Запросите новое письмо в приложении.',
@@ -121,7 +121,7 @@ const T = {
     pwShort:'No mínimo 8 caracteres.', pwMismatch:'As senhas não coincidem.',
     pwWeak:'Esta senha aparece em vazamentos conhecidos. Escolha outra.',
     open:'Abrir o SayMyFood neste aparelho',
-    openFail:'O SayMyFood não abriu — talvez não esteja instalado aqui. Nada foi perdido: abra o app no celular e entre.',
+    openFail:'O SayMyFood não abriu — talvez não esteja instalado neste celular. Nada foi perdido: a confirmação acima já foi feita. Abra o app e entre.',
     preview:'versão preview',
     onPhone:'Abra o SayMyFood no seu celular e entre.',
     bad:'O link não funcionou', badP:'Pode ter expirado ou já ter sido usado. Peça um novo e-mail pelo aplicativo.',
@@ -137,7 +137,7 @@ const T = {
     pwShort:'Mínimo 8 caracteres.', pwMismatch:'Las contraseñas no coinciden.',
     pwWeak:'Esta contraseña aparece en filtraciones conocidas. Elige otra.',
     open:'Abrir SayMyFood en este dispositivo',
-    openFail:'SayMyFood no se ha abierto: puede que no esté instalado aquí. No se ha perdido nada: abre la app en tu móvil e inicia sesión.',
+    openFail:'SayMyFood no se ha abierto: puede que no esté instalado en este teléfono. No se pierde nada: la confirmación de arriba ya se ha realizado. Abre la app e inicia sesión.',
     preview:'versión preview',
     onPhone:'Abre SayMyFood en tu móvil e inicia sesión.',
     bad:'El enlace no ha funcionado', badP:'Puede haber caducado o haberse usado ya. Pide un correo nuevo desde la aplicación.',
@@ -147,6 +147,10 @@ const T = {
 
 const $ = id => document.getElementById(id);
 const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+// The nutrientai:// scheme does not exist in a desktop browser, so the button
+// could not work there. Remove it rather than hide it: on a computer there is
+// nothing here to press, and the lede says what to do instead.
+if (!isMobile) { const box = document.getElementById('openbox'); if (box) box.remove(); }
 let lang = 'en';
 let state = 'working';
 let who = '';          // the confirmed address, shown under the heading
@@ -188,9 +192,11 @@ function paint(){
   $('pw2').placeholder = d.pw2;
   $('pwsave').textContent = d.save;
   $('pwhint').textContent = d.setPwP;
-  $('openapp').textContent = d.open;
-  $('openfail').textContent = d.openFail;
-  $('openpreview').textContent = d.preview;
+  if ($('openapp')) {          // absent on a desktop, where it was removed above
+    $('openapp').textContent = d.open;
+    $('openfail').textContent = d.openFail;
+    $('openpreview').textContent = d.preview;
+  }
   if ($('pwerr').dataset.key) $('pwerr').textContent = T[lang][$('pwerr').dataset.key];
 }
 
@@ -208,22 +214,26 @@ const type = q.get('type') || '';
 const ALLOWED = ['signup','recovery','email_change','invite','magiclink','email'];
 
 function deepLink(scheme){ return scheme + '://auth/callback?done=' + encodeURIComponent(type); }
-$('openapp').href = deepLink('nutrientai');
-$('openpreview').href = deepLink('nutrientai-preview');
+if ($('openapp')) {
+  $('openapp').href = deepLink('nutrientai');
+  $('openpreview').href = deepLink('nutrientai-preview');
+}
 
 // If the app opens, this page goes to the background. If it is still visible a
 // moment later, nothing happened - say so instead of leaving the user guessing.
 function watchOpen(){
   openTried = true;
   setTimeout(() => {
-    if (openTried && !document.hidden) { $('openfail').hidden = false; }
+    if (openTried && !document.hidden && $('openfail')) { $('openfail').hidden = false; }
   }, 1600);
 }
 document.addEventListener('visibilitychange', () => { if (document.hidden) openTried = false; });
-$('openapp').addEventListener('click', watchOpen);
-$('openpreview').addEventListener('click', watchOpen);
+if ($('openapp')) {
+  $('openapp').addEventListener('click', watchOpen);
+  $('openpreview').addEventListener('click', watchOpen);
+}
 
-function showOpen(){ if (isMobile) $('openbox').hidden = false; }
+function showOpen(){ const box = $('openbox'); if (box) box.hidden = false; }
 
 if (!tokenHash || ALLOWED.indexOf(type) === -1) {
   state = 'nolink'; paint();
