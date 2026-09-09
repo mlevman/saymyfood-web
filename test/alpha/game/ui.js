@@ -29,6 +29,9 @@ return `<div${cls?' class="'+cls+'"':''}><span>${from+i+1}</span><span>${esc(r.n
 function scrollToMe(el){const m=el.querySelector('.me');if(m)el.scrollTop=Math.max(0,m.offsetTop-el.offsetTop-(el.clientHeight-m.offsetHeight)/2)}
 // The player's own line as it would read in the table. Nothing about it is stored anywhere.
 function meRow(){return{me:true,name:savedName||$('nm').value.trim()||t('you'),score:final.total,hero:(final.hero||hero)+(final.hard?'-hard':'')}}
+// The row Save has just written, located in a freshly fetched board.
+function findMine(list){if(savedName==null||!final)return -1;const sc=Math.round(final.total);
+for(let i=0;i<list.length;i++)if(list[i].score===sc&&(list[i].name||'')===savedName)return i;return -1}
 // A window of the board around index `at`, drawn on the final screen.
 function endWindow(list,at){const el=$('e-list'),a=Math.max(0,at-WIN),b=Math.min(list.length,at+WIN+1);
 el.innerHTML=rowsHTML(list.slice(a,b),a);el.hidden=false;scrollToMe(el)}
@@ -49,8 +52,13 @@ if(!remote)return;const list=rows.slice();list.splice(pos-1,0,meRow());endWindow
 $('play').addEventListener('click',()=>{show(null);GAME.start(hero,$('hard').checked)});
 $('next').addEventListener('click',()=>{if($('next').dataset.last){end(true,final)}else{show(null);GAME.next()}});
 $('again').addEventListener('click',()=>{GAME.reset();show('ov-intro')});
+// Save is the only thing that writes anything. An empty name still does nothing.
 $('save').addEventListener('click',async()=>{const n=$('nm').value.trim();if(!n||!final)return;$('save').disabled=true;$('nm').disabled=true;
-const remote=await BOARD.save(n,final.total,(final.hero||hero)+(final.hard?'-hard':''));const {rows}=await BOARD.list();$('e-rank').textContent=t('saved',{r:BOARD.rank(rows,final.total+.5),n:rows.length})+(remote?'':' · '+t('local'))});
+const f=final,remote=await BOARD.save(n,final.total,(final.hero||hero)+(final.hard?'-hard':''));savedName=n.slice(0,24);
+const lb=await BOARD.list();if(final!==f)return;const rows=lb.rows;
+$('e-rank').textContent=t('saved',{r:BOARD.rank(rows,final.total+.5),n:rows.length})+(remote?'':' · '+t('local'));
+// The same window again, now around the row that was really written.
+const at=findMine(rows);if(lb.remote&&at>=0){const list=rows.slice();list[at]={...list[at],me:true};endWindow(list,at)}else $('e-list').hidden=true});
 $('nm').addEventListener('keydown',e=>{if(e.key==='Enter')$('save').click()});
 $('nm').addEventListener('input',()=>{const n=$('e-list').querySelector('.me span:nth-child(2)');if(n)n.textContent=$('nm').value.trim()||t('you')});
 async function board(){show('ov-board');$('list').innerHTML='';const {rows,remote}=await BOARD.list();$('b-note').textContent=remote?'':t('local');
