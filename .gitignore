@@ -4,7 +4,10 @@
 prompt-web.md
 prompt.md
 
-# Run journal and unattended-run output.
+# The unattended-run launcher and everything it produces. The launcher holds the
+# owner's local paths and is not part of the site; night_logs/ is where it puts the
+# archived journals and the per-attempt transcripts.
+run_night_web.ps1
 RUN_LOG.md
 night_logs/
 attempt_*.log
