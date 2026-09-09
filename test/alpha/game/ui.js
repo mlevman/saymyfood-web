@@ -61,11 +61,17 @@ $('e-rank').textContent=t('saved',{r:BOARD.rank(rows,final.total+.5),n:rows.leng
 const at=findMine(rows);if(lb.remote&&at>=0){const list=rows.slice();list[at]={...list[at],me:true};endWindow(list,at)}else $('e-list').hidden=true});
 $('nm').addEventListener('keydown',e=>{if(e.key==='Enter')$('save').click()});
 $('nm').addEventListener('input',()=>{const n=$('e-list').querySelector('.me span:nth-child(2)');if(n)n.textContent=$('nm').value.trim()||t('you')});
-async function board(){show('ov-board');$('list').innerHTML='';const {rows,remote}=await BOARD.list();$('b-note').textContent=remote?'':t('local');
-if(!rows.length){$('list').innerHTML='<div><span></span><span>'+t('empty')+'</span><span></span></div>';return}
-const my=final&&final.total;const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-$('list').innerHTML=rows.slice(0,200).map((r,i)=>{const hard=/-hard$/.test(r.hero||'');const cls=[my!=null&&r.score===my&&$('nm').disabled?'me':'',hard?'hard':''].filter(Boolean).join(' ');
-return `<div${cls?' class="'+cls+'"':''}><span>${i+1}</span><span>${esc(r.name||t('anon'))}</span><span>${r.score}</span></div>`}).join('')}
+// With a score in this session the list carries the player's line and opens on it;
+// with none - the intro screen - it renders from the top, as before.
+async function board(){show('ov-board');const el=$('list');el.innerHTML='';const {rows,remote}=await BOARD.list();$('b-note').textContent=remote?'':t('local');
+const mine=!!(final&&final.total!=null);
+if(!rows.length&&!mine){el.innerHTML='<div><span></span><span>'+t('empty')+'</span><span></span></div>';return}
+let list=rows.slice(),at=-1;
+if(mine){at=findMine(list);
+if(at>=0)list[at]={...list[at],me:true};              // saved: the real row
+else if(savedName==null){at=BOARD.rank(rows,final.total)-1;list.splice(at,0,meRow())}} // not saved: the same unwritten line as on the final screen
+el.innerHTML=rowsHTML(list.slice(0,Math.max(200,at+WIN+1)),0);
+if(at>=0)scrollToMe(el)}
 let before=null;$('brd').addEventListener('click',()=>{before=ovs.find(o=>!$(o).hidden)||null;GAME.pauseState(true);board()});
 $('e-brd').addEventListener('click',()=>{before='ov-end';board()});
 $('rw-open').addEventListener('click',()=>{show('ov-rw')});
