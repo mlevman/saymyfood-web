@@ -39,8 +39,13 @@ const pfCell=v=>'<span class="pf">'+(PF[v]||'')+'</span>';
 // `list` is board rows in score order; the entry carrying me:true is the player's own line.
 function rowsHTML(list,from){return list.map((r,i)=>{const hard=/-hard$/.test(r.hero||'');const cls=[r.me?'me':'',hard?'hard':''].filter(Boolean).join(' ');
 return `<div${cls?' class="'+cls+'"':''}><span>${from+i+1}</span>${pfCell(r.platform)}<span>${esc(r.name||t('anon'))}</span><span>${r.score}</span></div>`}).join('')}
-// The list is not a positioned ancestor, so both offsets are measured from the same box.
-function scrollToMe(el){const m=el.querySelector('.me');if(m)el.scrollTop=Math.max(0,m.offsetTop-el.offsetTop-(el.clientHeight-m.offsetHeight)/2)}
+function scrollToMe(el){const m=el.querySelector('.me');if(!m)return;
+// Measured rectangles, so nothing depends on which element happens to be the row's
+// offsetParent: the row's distance from the top of the scroller's content is the
+// gap between the two boxes on screen, plus however far the box is already scrolled.
+const r=m.getBoundingClientRect(),b=el.getBoundingClientRect();
+const top=r.top-b.top-el.clientTop+el.scrollTop,max=Math.max(0,el.scrollHeight-el.clientHeight);
+el.scrollTop=Math.max(0,Math.min(max,top-(el.clientHeight-r.height)/2))}
 // The player's own line as it would read in the table. Nothing about it is stored anywhere.
 function meRow(){return{me:true,name:savedName||$('nm').value.trim()||t('you'),score:final.total,hero:(final.hero||hero)+(final.hard?'-hard':''),platform:platform()}}
 // The row Save has just written, located in a freshly fetched board.
