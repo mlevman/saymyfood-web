@@ -15,6 +15,21 @@ transpiler, no framework.
   Supabase client from a CDN as an ES module. Do not extend that pattern.)
 - Plain HTML, CSS and JavaScript that a browser can run as-is.
 
+## Cache busting: one hand-bumped number
+
+Every local stylesheet and script reference on every page carries the same version
+marker — `site.css?v=1`, `i18n.js?v=1`, `../../apple.js?v=1` and so on. Without it a
+returning visitor keeps the cached copy of a changed `.css` or `.js` file.
+
+- **Bump the number on every deploy that changes a `.css` or `.js` file**, on every
+  page at once: `?v=1` becomes `?v=2` everywhere. It is one number for the whole
+  site, not a per-file version — a single find-and-replace of `?v=N"` is the whole job.
+- The pages that carry it: `index.html`, `privacy.html`, `terms.html`,
+  `delete-account.html`, `auth/callback/index.html`, `test/alpha/index.html`,
+  `test/alpha/game/index.html`. A new page or a new `<link>`/`<script>` gets the
+  current number too.
+- No hashes, no build step, no tooling. A hand-bumped integer is the entire mechanism.
+
 ## Working rules
 
 - **After every edit to a `.js` file, run `node --check <file>`** and quote the
