@@ -88,7 +88,16 @@ $('e-rank').textContent=t('saved',{r:BOARD.rank(rows,savedScore+.5),n:rows.lengt
 // The same window again, now around the row that was really written.
 const at=findMine(rows);if(lb.remote&&at>=0){const list=rows.slice();list[at]={...list[at],me:true};endWindow(list,at)}else $('e-list').hidden=true});
 $('nm').addEventListener('keydown',e=>{if(e.key==='Enter')$('save').click()});
-$('nm').addEventListener('input',()=>{const n=$('e-list').querySelector('.me span:nth-child(3)');if(n)n.textContent=$('nm').value.trim()||t('you')});
+// The board refuses any name containing < > " or ' (bad_name), and a refused Save loses
+// the run. So those four never stay in the field: stripped the moment they arrive -
+// typed, pasted or autofilled - with the caret kept where it was. No message: there is
+// nothing to explain about four characters nobody puts in a nickname. The value is only
+// rewritten when one of them is actually there, so IME composition is left alone.
+const BAD=/[<>"']/g;
+$('nm').addEventListener('input',()=>{const f=$('nm'),v=f.value,c=v.replace(BAD,'');
+if(c!==v){const at=f.selectionStart;f.value=c;
+if(at!=null){const p=v.slice(0,at).replace(BAD,'').length;try{f.setSelectionRange(p,p)}catch(_){}}}
+const n=$('e-list').querySelector('.me span:nth-child(3)');if(n)n.textContent=f.value.trim()||t('you')});
 // With a score in this session the list carries the player's line and opens on it;
 // with none - the intro screen - it renders from the top, as before.
 async function board(){show('ov-board');const el=$('list');el.innerHTML='';const {rows,remote}=await BOARD.list();$('b-note').textContent=remote?'':t('local');
