@@ -33,8 +33,7 @@ header{position:sticky;top:0;z-index:20;background:rgba(12,16,14,0.78);backdrop-
 .lmenu button{text-align:left;background:transparent;border:0;border-radius:9px;padding:9px 12px;color:var(--tx2);font:500 13.5px var(--font);cursor:pointer}
 .lmenu button:hover{background:rgba(255,255,255,0.06);color:var(--tx)}
 .lmenu button.on{color:var(--mint);background:var(--mint-dim);font-weight:600}
-/* pills */
-.pill{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;letter-spacing:0.02em;color:var(--mint);background:var(--mint-dim);border:1px solid rgba(143,220,192,0.22);border-radius:999px;padding:6px 14px}
+/* status dot */
 .dot{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 0 rgba(143,220,192,0.5);animation:pulse 2.4s ease-out infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(143,220,192,0.45)}70%{box-shadow:0 0 0 8px rgba(143,220,192,0)}100%{box-shadow:0 0 0 0 rgba(143,220,192,0)}}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--mint);color:#0B1512;font:700 14.5px var(--font);letter-spacing:-0.1px;padding:12px 22px;border-radius:999px;border:0;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,background .16s ease}

@@ -21,7 +21,7 @@ l1h:"Privacy Policy",l1p:"What we collect, where it's stored, and what we never 
 l2h:"Terms of Service",l2p:"The agreement between you and us, in plain language.",
 l3h:"Delete your account",l3p:"Remove your account and all associated data — in the app, or by request.",
 read:"Read →",howto:"How to →",
-ctah:"Want to test it early?",ctap:"Write to us — we read every message.",
+ctah:"Something to tell us, or an idea to share?",ctap:"Write to us — we read every message.",
 fprivacy:"Privacy",fterms:"Terms",fdelete:"Delete account",fcontact:"Contact"},
 
 ru:{nav1:"Что это",nav2:"Что дальше",nav3:"Документы",nav4:"Связаться",
@@ -45,7 +45,7 @@ l1h:"Политика конфиденциальности",l1p:"Что мы с�
 l2h:"Условия использования",l2p:"Договор между вами и нами, простым языком.",
 l3h:"Удаление аккаунта",l3p:"Удалить аккаунт и все связанные данные — в приложении или по запросу.",
 read:"Читать →",howto:"Как это сделать →",
-ctah:"Хотите протестировать раньше?",ctap:"Напишите нам — мы читаем каждое письмо.",
+ctah:"Хотите что-то сообщить или предложить?",ctap:"Напишите нам — мы читаем каждое письмо.",
 fprivacy:"Конфиденциальность",fterms:"Условия",fdelete:"Удаление аккаунта",fcontact:"Связаться"},
 
 es:{/* owner will proofread */nav1:"Qué es",nav2:"Qué sigue",nav3:"Legal",nav4:"Contacto",
@@ -69,7 +69,7 @@ l1h:"Política de Privacidad",l1p:"Qué recopilamos, dónde se guarda y qué nun
 l2h:"Términos del Servicio",l2p:"El acuerdo entre tú y nosotros, en lenguaje claro.",
 l3h:"Eliminar tu cuenta",l3p:"Elimina tu cuenta y todos los datos asociados — en la app o por solicitud.",
 read:"Leer →",howto:"Cómo →",
-ctah:"¿Quieres probarla antes?",ctap:"Escríbenos — leemos cada mensaje.",
+ctah:"¿Quieres contarnos algo o proponernos una idea?",ctap:"Escríbenos — leemos cada mensaje.",
 fprivacy:"Privacidad",fterms:"Términos",fdelete:"Eliminar cuenta",fcontact:"Contacto"},
 
 pt:{/* owner will proofread */nav1:"O que é",nav2:"O que vem",nav3:"Legal",nav4:"Contato",
@@ -93,7 +93,7 @@ l1h:"Política de Privacidade",l1p:"O que coletamos, onde fica e o que nunca faz
 l2h:"Termos de Serviço",l2p:"O acordo entre você e nós, em linguagem simples.",
 l3h:"Excluir sua conta",l3p:"Exclua sua conta e todos os dados associados — no app ou por solicitação.",
 read:"Ler →",howto:"Como →",
-ctah:"Quer testar antes?",ctap:"Escreva para nós — lemos cada mensagem.",
+ctah:"Quer contar alguma coisa ou dar uma sugestão?",ctap:"Escreva para nós — lemos cada mensagem.",
 fprivacy:"Privacidade",fterms:"Termos",fdelete:"Excluir conta",fcontact:"Contato"}
 };
 (function(){
