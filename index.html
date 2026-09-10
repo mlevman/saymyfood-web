@@ -50,7 +50,7 @@ h1 em{font-style:normal;background:linear-gradient(100deg,#3FBF6E,#E0C93B 34%,#F
 .nrow .st{flex-shrink:0;width:124px;font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--tx3);padding-top:3px}
 .nrow.now .st{color:var(--mint)}
 .nrow h3{font-size:15.5px;margin:0 0 4px;font-weight:600}
-.nrow p{font-size:13.5px;color:var(--tx2);margin:0}
+.nrow h3.long{margin:0;font-weight:500;line-height:1.6;text-wrap:pretty}
 .legal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
 .lcard{display:block;background:var(--card);border:1px solid var(--hair);border-radius:var(--r);padding:20px;color:var(--tx);transition:transform .2s ease,border-color .2s ease}
 .lcard:hover{transform:translateY(-3px);border-color:var(--hair2);color:var(--tx)}
@@ -96,7 +96,7 @@ h1 em{font-style:normal;background:linear-gradient(100deg,#3FBF6E,#E0C93B 34%,#F
 <div class="hero-grid"><div class="inner">
 <h1 data-i18n="h1">A food diary you'll actually <em>want</em> to keep</h1>
 <p class="lede" data-i18n="lede">Log a meal however suits you: a photo, your voice, or any mix of the two. SayMyFood counts the calories, protein, fat and carbs, and puts the whole picture in one place — day, week, month. See how much protein and fibre you really get on average.</p>
-<div class="hero-cta"><a class="btn" href="test/alpha/" data-i18n="cta1">Ask for early access</a><a class="btn ghost" href="#next" data-i18n="cta2">What's coming</a></div>
+<div class="hero-cta"><a class="btn" href="test/alpha/" data-i18n="cta1">Ask for early access</a><a class="btn ghost" href="#next" data-i18n="cta2">Coming up</a></div>
 <span class="pill"><span class="dot"></span><span data-i18n="pill">Closed testing · Google Play registration in progress</span></span>
 <div class="langs"><span class="chip">English</span><span class="chip">Русский</span><span class="chip">Português&nbsp;(BR)</span><span class="chip">Español</span></div>
 </div>
@@ -121,12 +121,11 @@ h1 em{font-style:normal;background:linear-gradient(100deg,#3FBF6E,#E0C93B 34%,#F
 
 <section id="next"><div class="wrap">
 <p class="eyebrow rv" data-i18n="s2eye">Where we are</p>
-<h2 class="rv" data-i18n="s2h">Built in the open, shipped in order</h2>
+<h2 class="rv" data-i18n="s2h">Coming up</h2>
 <div class="next">
-<div class="nrow now rv"><div class="st" data-i18n="stnow">Now</div><div><h3 data-i18n="r1h">Closed testing</h3><p data-i18n="r1p">A small group of testers is using the Android app daily. Google Play registration is in progress.</p></div></div>
-<div class="nrow rv"><div class="st" data-i18n="stnext">Next</div><div><h3 data-i18n="r2h">Android release</h3><p data-i18n="r2p">Public release on Google Play once review and store setup are complete. iOS follows.</p></div></div>
-<div class="nrow rv"><div class="st" data-i18n="stplan">Planned</div><div><h3 data-i18n="r3h">Deeper analytics</h3><p data-i18n="r3p">More ways to slice your history — comparisons between periods, tag-level breakdowns, exportable reports. This is where most of our effort goes.</p></div></div>
-<div class="nrow rv"><div class="st" data-i18n="stplan">Planned</div><div><h3 data-i18n="r4h">Web access</h3><p data-i18n="r4p">Reading and editing your diary from a browser, alongside the phone app.</p></div></div>
+<div class="nrow now rv"><div class="st" data-i18n="stnow">Now</div><div><h3 data-i18n="r1h">Closed testing</h3></div></div>
+<div class="nrow rv"><div class="st" data-i18n="stnext">Next</div><div><h3 data-i18n="r2h">Android release</h3></div></div>
+<div class="nrow rv"><div class="st" data-i18n="stplan">Planned</div><div><h3 class="long" data-i18n="r3h">Barcode scanner · iPhone app · access from your browser · recipe sharing · and plenty more</h3></div></div>
 </div>
 </div></section>
 
