@@ -36,11 +36,13 @@
 .tf [hidden]{display:none}
 #formwrap{transition:opacity .45s ease,transform .45s ease}
 #formwrap.away{opacity:0;transform:translateY(-6px);pointer-events:none}
-.done{padding-top:10px}.done h2{font-size:26px;letter-spacing:-0.02em;margin:0 0 10px;font-weight:700}
-.done p{margin:0 0 8px;font-size:15px;line-height:1.5;color:var(--tx2);text-wrap:pretty}
+/* The confirmation is the loudest thing on the screen: a big mint headline, the
+   promise at body size, the spam hint small and grey (.tf .fine). */
+.done{padding-top:10px}.done h2{font-size:42px;line-height:1.08;letter-spacing:-0.035em;margin:0 0 16px;font-weight:800;color:var(--mint);text-wrap:balance}
+.done p{margin:0 0 8px;font-size:16px;line-height:1.55;color:var(--tx);text-wrap:pretty}
 .done .fine{margin-top:16px}
 .done .replay{display:inline-block;margin-top:14px;font-size:13px;color:var(--tx3)}
 .done:not([hidden]){animation:smf-in .55s ease-out both}
 @keyframes smf-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@media(max-width:760px){.alpha{padding:30px 22px 40px}.agrid{grid-template-columns:1fr;gap:18px}.stage{order:-1;height:230px}.tf h1{font-size:28px}.tf .need-h{font-size:17.5px}.alpha .apz{margin-top:30px}}
+@media(max-width:760px){.alpha{padding:30px 22px 40px}.agrid{grid-template-columns:1fr;gap:18px}.stage{order:-1;height:230px}.tf h1{font-size:28px}.tf .need-h{font-size:17.5px}.done h2{font-size:34px}.alpha .apz{margin-top:30px}}
 @media(prefers-reduced-motion:reduce){#formwrap,.done:not([hidden]){transition:none;animation:none}}
