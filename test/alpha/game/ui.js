@@ -134,12 +134,12 @@ $('pz-resume').addEventListener('click',()=>{show(null);GAME.resume()});
 // pointer id, and `keyHeld` is what the keyboard is holding. apply() recomputes
 // every engine input from both, so neither source can clear the other's key, and
 // two fingers on one control do not cancel each other on the first release.
-const held=new Map();   // pointerId -> control key
+const held=new Map();   // pointerId -> control key, or null while that finger is on no control
 const keyHeld=new Set();
 const CTL=[...document.querySelectorAll('[data-k]')];
 function apply(){const on={left:false,right:false,gather:false,throw:false};
 for(const k of keyHeld)on[k]=true;
-for(const k of held.values())on[k]=true;
+for(const k of held.values())if(k)on[k]=true;
 for(const k in on)GAME.input[k]=on[k];
 const live=new Set(held.values());CTL.forEach(el=>el.classList.toggle('act',live.has(el.dataset.k)))}
 // keyboard - same keys, same meaning as before
@@ -147,18 +147,37 @@ const K={ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'righ
 addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;const k=K[e.key];if(k){keyHeld.add(k);apply();e.preventDefault()}});
 addEventListener('keyup',e=>{const k=K[e.key];if(k){keyHeld.delete(k);apply()}});
 addEventListener('blur',()=>{keyHeld.clear();held.clear();apply()});
-// On-screen controls: press and hold, never click. Each control captures its own
-// pointer, so a finger that slides off it keeps holding it, the matching pointerup
-// still arrives here, and a finger landing on throw cannot disturb one on the D-pad.
-CTL.forEach(el=>{const k=el.dataset.k;
-el.addEventListener('pointerdown',e=>{e.preventDefault();if(e.pointerType!=='mouse')markTouch();
-try{el.setPointerCapture(e.pointerId)}catch(_){}
-held.set(e.pointerId,k);apply()});
+// On-screen controls: press and hold, never click, and they behave like physical
+// buttons - a control is held while a finger is ON it. A finger that slides off
+// releases it, a finger that slides onto another control presses that one, and the
+// gap between left and right holds nothing.
+// Receiving and deciding are separate. Receiving: each zone captures every pointer
+// that lands anywhere in it, so every move, and the pointerup even far outside the
+// zone, still arrives here - without that a control could stay held forever.
+// Deciding: on every down and move the finger's coordinates are hit-tested against
+// the controls, so what is held is where the finger IS, not where it started.
+// Each finger is its own entry, so walking while charging works and one finger's
+// lift or slide never touches another's.
+const ZONES=[...document.querySelectorAll('.zone')];
+function under(x,y){for(const el of CTL){const r=el.getBoundingClientRect();
+if(r.width>0&&r.height>0&&x>=r.left&&x<r.right&&y>=r.top&&y<r.bottom)return el.dataset.k}return null}
+function track(e){const k=under(e.clientX,e.clientY);if(k&&e.pointerType!=='mouse')markTouch();
+if(held.get(e.pointerId)!==k){held.set(e.pointerId,k);apply()}}
+ZONES.forEach(z=>{
+z.addEventListener('pointerdown',e=>{e.preventDefault();
+try{z.setPointerCapture(e.pointerId)}catch(_){}
+held.set(e.pointerId,null);track(e)});
+// Only fingers that went down in a zone are followed; a hovering mouse is not.
+z.addEventListener('pointermove',e=>{if(held.has(e.pointerId))track(e)});
 const release=e=>{if(held.delete(e.pointerId))apply()};
-el.addEventListener('pointerup',release);
-el.addEventListener('pointercancel',release);
-el.addEventListener('contextmenu',e=>e.preventDefault());
-el.addEventListener('dragstart',e=>e.preventDefault())});
+z.addEventListener('pointerup',release);
+z.addEventListener('pointercancel',release);
+// The browser can take the capture away - for instance when a screen comes up and
+// the zone stops being displayed - and then the pointerup would land elsewhere. The
+// check on target ignores the same event bubbling up from a control inside the zone.
+z.addEventListener('lostpointercapture',e=>{if(e.target===z)release(e)});
+z.addEventListener('contextmenu',e=>e.preventDefault());
+z.addEventListener('dragstart',e=>e.preventDefault())});
 // The gather control teaches itself. With no apples left AND standing in the gathering
 // zone by their own tree, `down` is the only move worth making, so it gets a quiet
 // highlight - and loses it the moment either condition ends (gathering one apple ends
