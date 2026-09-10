@@ -2,7 +2,7 @@
 window.SMF_I18N={
 en:{/* owner will proofread */nav1:"What it is",nav2:"What's next",nav3:"Legal",nav4:"Contact",
 h1:"A food diary you'll actually <em>want</em> to keep",
-lede:"Log a meal however suits you: a photo, your voice, or any mix of the two. SayMyFood counts the calories, protein, fat and carbs, and puts the whole picture in one place — day, week, month. See how much protein and fibre you really get on average.",
+lede:"Log a meal however suits you: a photo, your voice, your own recipes, or any mix of them. AI helps you fix the details. SayMyFood counts the calories, protein, fat and carbs, and puts the whole picture in one place — day, week, month. See how much protein and fibre you really get on average.",
 cta1:"Ask for early access",cta2:"Coming up",
 pill:"Closed testing · Google Play registration in progress",
 s1eye:"What it is",s1h:"Quick to log, easy to make sense of",
@@ -26,7 +26,7 @@ fprivacy:"Privacy",fterms:"Terms",fdelete:"Delete account",fcontact:"Contact"},
 
 ru:{nav1:"Что это",nav2:"Что дальше",nav3:"Документы",nav4:"Связаться",
 h1:"Дневник питания, который <em>хочется</em> вести",
-lede:"Фиксируйте приём пищи различными способами: фото, голос или любые комбинации. SayMyFood посчитает калории и БЖУ и соберёт в одном месте всю картину — день, неделя, месяц. Смотрите, сколько вы потребляете белка и клетчатки в среднем.",
+lede:"Фиксируйте приём пищи различными способами: фото, голос, ваши рецепты или любые их комбинации. Редактирование с помощью ИИ. SayMyFood посчитает калории, белки, жиры, углеводы, соберёт в одном месте всю картину — день, неделя, месяц. Смотрите, сколько вы потребляете белка и клетчатки в среднем.",
 cta1:"Запросить ранний доступ",cta2:"Ближайшие планы",
 pill:"Закрытое тестирование · идёт регистрация в Google Play",
 s1eye:"Что это",s1h:"Записывать быстро, анализировать просто",
@@ -50,7 +50,7 @@ fprivacy:"Конфиденциальность",fterms:"Условия",fdelete:
 
 es:{/* owner will proofread */nav1:"Qué es",nav2:"Qué sigue",nav3:"Legal",nav4:"Contacto",
 h1:"Un diario de comidas que da <em>gusto</em> llevar",
-lede:"Registra tus comidas como prefieras: con una foto, con la voz o combinando ambas. SayMyFood calcula las calorías, proteínas, grasas y carbohidratos, y reúne todo el panorama en un solo lugar: día, semana, mes. Mira cuánta proteína y fibra consumes en promedio.",
+lede:"Registra tus comidas como prefieras: con una foto, con la voz, con tus propias recetas o combinándolos. La IA te ayuda a ajustar los detalles. SayMyFood calcula las calorías, proteínas, grasas y carbohidratos, y reúne todo el panorama en un solo lugar: día, semana, mes. Mira cuánta proteína y fibra consumes en promedio.",
 cta1:"Pedir acceso anticipado",cta2:"Próximos pasos",
 pill:"Pruebas cerradas · registro en Google Play en curso",
 s1eye:"Qué es",s1h:"Rápido de registrar, fácil de analizar",
@@ -74,7 +74,7 @@ fprivacy:"Privacidad",fterms:"Términos",fdelete:"Eliminar cuenta",fcontact:"Con
 
 pt:{/* owner will proofread */nav1:"O que é",nav2:"O que vem",nav3:"Legal",nav4:"Contato",
 h1:"Um diário alimentar que dá <em>vontade</em> de usar",
-lede:"Registre suas refeições do jeito que preferir: foto, voz ou as duas juntas. O SayMyFood calcula as calorias, proteínas, gorduras e carboidratos e reúne o quadro completo em um só lugar — dia, semana, mês. Veja quanto de proteína e fibra você consome, em média.",
+lede:"Registre suas refeições do jeito que preferir: foto, voz, suas próprias receitas ou qualquer combinação. A IA ajuda a ajustar os detalhes. O SayMyFood calcula as calorias, proteínas, gorduras e carboidratos e reúne o quadro completo em um só lugar — dia, semana, mês. Veja quanto de proteína e fibra você consome, em média.",
 cta1:"Pedir acesso antecipado",cta2:"Próximos passos",
 pill:"Testes fechados · registro no Google Play em andamento",
 s1eye:"O que é",s1h:"Rápido de registrar, fácil de analisar",
