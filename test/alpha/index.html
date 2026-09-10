@@ -77,8 +77,24 @@
 <img class="rk-logo" src="../../brand/saymyfood-mark.png" alt="">
 </div></div>
 </div>
-<section class="iosbox" id="ios">
-<div><p class="eyebrow">iPhone</p><p class="ios-t" id="t-ios"></p></div>
+<!-- the apple block: open by default here; shared.js closes it once a request is sent -->
+<div class="apz open" id="apz">
+<div class="apz-row"><button class="apz-btn" type="button" aria-expanded="true" aria-controls="apz-body"><span class="apz-q"><span data-apz="iosQ"></span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span><span class="apz-apple" aria-hidden="true">
+<!-- the game's own apple (art.js apple(), r=10): whole, no bite -->
+<svg viewBox="-12.5 -15.5 25 26.5">
+<defs>
+<radialGradient id="apg" gradientUnits="userSpaceOnUse" cx="1.5" cy="1.5" r="13" fx="-4.5" fy="-4" fr=".5"><stop offset="0" stop-color="#C9DC72"/><stop offset=".22" stop-color="#E0C93B"/><stop offset=".48" stop-color="#F0913E"/><stop offset=".78" stop-color="#E23E24"/><stop offset="1" stop-color="#A32A18"/></radialGradient>
+<clipPath id="apc"><path d="M0-6.2C-3.5-10.5-12-8.5-10.8-.5C-10 6-5 10.2-1.2 8.6Q0 7.6 1.2 8.6C5 10.2 10 6 10.8-.5C12-8.5 3.5-10.5 0-6.2Z"/></clipPath>
+</defs>
+<path d="M0-6.2C-3.5-10.5-12-8.5-10.8-.5C-10 6-5 10.2-1.2 8.6Q0 7.6 1.2 8.6C5 10.2 10 6 10.8-.5C12-8.5 3.5-10.5 0-6.2Z" fill="url(#apg)"/>
+<g clip-path="url(#apc)"><ellipse cx="-5" cy="-3.8" rx="1.8" ry="4" transform="rotate(-20 -5 -3.8)" fill="#fff" opacity=".26"/><ellipse cx="-2.5" cy="-5.5" rx="5" ry="3" transform="rotate(-11.5 -2.5 -5.5)" fill="#2FB56A" opacity=".22"/><ellipse cx="4.5" cy="3.5" rx="5" ry="4.5" transform="rotate(23 4.5 3.5)" fill="#9E2413" opacity=".35"/></g>
+<path d="M0-6.2Q.2-10 1.4-12.8" stroke="#4A2E1C" stroke-width="2" stroke-linecap="round" fill="none"/>
+<ellipse cx="4.8" cy="-10.5" rx="5" ry="2" transform="rotate(-34.4 4.8 -10.5)" fill="#2FB56A"/>
+<path d="M1.4-11L8.2-14.2" stroke="#0E1210" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
+</svg></span></button></div>
+<div class="apz-body" id="apz-body"><div class="apz-in">
+<div class="iosbox" id="ios">
+<div><p class="eyebrow">iPhone</p><p class="ios-t" data-apz="ios"></p></div>
 <a class="gamebtn" href="game/index.html"><span class="gb-apple" aria-hidden="true">
 <!-- the game's own apple (art.js apple(), r=10): whole, no bite -->
 <svg viewBox="-12.5 -15.5 25 26.5">
@@ -91,8 +107,10 @@
 <path d="M0-6.2Q.2-10 1.4-12.8" stroke="#4A2E1C" stroke-width="2" stroke-linecap="round" fill="none"/>
 <ellipse cx="4.8" cy="-10.5" rx="5" ry="2" transform="rotate(-34.4 4.8 -10.5)" fill="#2FB56A"/>
 <path d="M1.4-11L8.2-14.2" stroke="#0E1210" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
-</svg></span><span id="t-ios-a"></span></a>
-</section>
+</svg></span><span data-apz="iosA"></span></a>
+</div>
+</div></div>
+</div>
 </main>
 <footer><div class="wrap ft">
 <span style="display:flex;align-items:center;gap:9px"><span class="mark nosheen" style="width:18px;height:18px"><img src="../../brand/saymyfood-mark.png" alt=""></span>© 2026 SayMyFood</span>
@@ -128,6 +146,7 @@ window.SMF_LAUNCH=function(){if(RM){rk.style.transition='opacity .4s';rk.style.o
 if(navigator.vibrate)try{navigator.vibrate(12)}catch(e){}
 ember(70,true);launch={t0:performance.now(),t:0,vx:0};return 1400}
 })();</script>
+<script src="../../apple.js"></script>
 <script type="module" src="shared.js"></script>
 </body>
 </html>

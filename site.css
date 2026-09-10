@@ -72,5 +72,37 @@ footer{padding:34px 0 46px;border-top:1px solid var(--hair);color:var(--tx3);fon
 .lang button{border:1px solid var(--hair);background:transparent;border-radius:999px;padding:7px 15px;font:600 13px var(--font);cursor:pointer;color:var(--tx2);transition:all .16s ease}
 .lang button:hover{color:var(--tx);border-color:var(--hair2)}
 .lang button.active{background:var(--mint-dim);border-color:rgba(143,220,192,0.35);color:var(--mint)}
+/* ── the apple block: the game's apple opens and closes the iPhone-and-game section in place ── */
+.apz{margin:40px 0 0}
+.apz-row{display:flex;justify-content:flex-end}
+.apz-btn{display:inline-flex;align-items:center;gap:14px;min-height:44px;margin:0;padding:0;border:0;background:none;color:var(--tx2);font:600 14.5px var(--font);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.apz-btn:hover,.apz-btn[aria-expanded="true"]{color:var(--tx)}
+.apz-btn:focus-visible{outline:none}
+.apz-q{display:inline-flex;align-items:center;gap:7px;text-align:right}
+.apz-q svg{flex-shrink:0;opacity:.75;transition:transform .25s ease}
+.apz-btn[aria-expanded="true"] .apz-q svg{transform:rotate(180deg)}
+.apz-apple{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:84px;height:84px;border-radius:50%;background:#0E1210;border:1px solid rgba(240,145,62,.40);box-shadow:0 12px 34px rgba(240,145,62,.16);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.apz-apple svg{display:block;width:54px;height:57px;transition:transform .3s ease}
+.apz-btn:hover .apz-apple{transform:translateY(-3px);border-color:rgba(240,145,62,.7);box-shadow:0 16px 40px rgba(240,145,62,.28)}
+.apz-btn:hover .apz-apple svg{transform:rotate(-9deg)}
+.apz-btn:active .apz-apple{transform:scale(.96)}
+.apz-btn[aria-expanded="true"] .apz-apple{border-color:#F0913E}
+.apz-btn:focus-visible .apz-apple{box-shadow:0 0 0 3px var(--bg),0 0 0 5px #F6B26B}
+/* Collapsed is a zero-height grid row, so it can animate to the section's real height.
+   visibility follows the animation out, so nothing hidden stays focusable. */
+.apz-body{display:grid;grid-template-rows:0fr;opacity:0;visibility:hidden;transition:grid-template-rows .42s ease,opacity .3s ease,visibility 0s linear .42s}
+.apz.open .apz-body{grid-template-rows:1fr;opacity:1;visibility:visible;transition:grid-template-rows .42s ease,opacity .35s ease .05s,visibility 0s}
+.apz-in{min-height:0;overflow:hidden}
+/* the iPhone section: a warm card with the game as a real button */
+.iosbox{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px 34px;align-items:center;margin:18px 0 0;padding:28px 30px;border:1px solid rgba(240,145,62,.30);border-radius:22px;background:linear-gradient(125deg,rgba(240,145,62,.12),rgba(226,62,36,.04) 55%,rgba(143,220,192,.03))}
+.iosbox .eyebrow{margin:0 0 10px;color:#F6B26B}
+.iosbox .ios-t{margin:0;max-width:60ch;font-size:16px;line-height:1.6;color:var(--tx);text-wrap:pretty}
+.gamebtn{display:inline-flex;align-items:center;gap:12px;padding:9px 24px 9px 9px;border-radius:999px;background:linear-gradient(100deg,#E0C93B,#F0913E 50%,#E23E24);color:#1A0E08;font:700 16px var(--font);white-space:nowrap;box-shadow:0 10px 30px rgba(240,145,62,.22);transition:transform .16s ease,box-shadow .16s ease,filter .16s ease}
+.gamebtn:hover{color:#1A0E08;transform:translateY(-2px);box-shadow:0 14px 36px rgba(240,145,62,.34);filter:brightness(1.05)}
+.gamebtn:active{transform:none}
+.gb-apple{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:46px;height:46px;border-radius:50%;background:#0E1210}
+.gb-apple svg{display:block;width:31px;height:33px;transition:transform .25s ease}
+.gamebtn:hover .gb-apple svg{transform:rotate(-9deg)}
+@media(max-width:760px){.iosbox{grid-template-columns:1fr;padding:22px 20px}.gamebtn{justify-self:start;white-space:normal}.apz-apple{width:76px;height:76px}.apz-apple svg{width:48px;height:51px}}
 @media(max-width:640px){h2{font-size:22px}.legal h1{font-size:26px}.hd-nav .hide-s{display:none}}
-@media(prefers-reduced-motion:reduce){.mark::after,.dot{animation:none}.rv{opacity:1;transform:none;transition:none}}
+@media(prefers-reduced-motion:reduce){.mark::after,.dot{animation:none}.rv{opacity:1;transform:none;transition:none}.apz-body,.apz.open .apz-body,.apz-apple,.apz-apple svg,.apz-q svg{transition:none}}
