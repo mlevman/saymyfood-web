@@ -26,8 +26,16 @@
 .tf .after p{margin:0 0 10px;font-size:14.5px;line-height:1.55;color:var(--tx2);text-wrap:pretty}
 .tf .after .thanks{margin:0;padding-left:12px;border-left:2px solid var(--carbs);color:var(--tx)}
 .tf .fine{margin:18px 0 0;font-size:12px;line-height:1.5;color:var(--tx3);text-wrap:pretty}
-.tf .ios{margin:16px 0 0;padding:12px 14px;border:1px dashed var(--hair2);border-radius:12px;font-size:13.5px;line-height:1.5;color:var(--tx2);text-wrap:pretty}
-.tf .ios a{color:var(--mint);font-weight:600;white-space:nowrap}
+/* iPhone section: its own warm card under the form, with the game as a real button */
+.alpha .iosbox{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px 34px;align-items:center;margin:52px 0 0;padding:28px 30px;border:1px solid rgba(240,145,62,.30);border-radius:22px;background:linear-gradient(125deg,rgba(240,145,62,.12),rgba(226,62,36,.04) 55%,rgba(143,220,192,.03))}
+.iosbox .eyebrow{margin:0 0 10px;color:#F6B26B}
+.iosbox .ios-t{margin:0;max-width:60ch;font-size:16px;line-height:1.6;color:var(--tx);text-wrap:pretty}
+.gamebtn{display:inline-flex;align-items:center;gap:12px;padding:9px 24px 9px 9px;border-radius:999px;background:linear-gradient(100deg,#E0C93B,#F0913E 50%,#E23E24);color:#1A0E08;font:700 16px var(--font);white-space:nowrap;box-shadow:0 10px 30px rgba(240,145,62,.22);transition:transform .16s ease,box-shadow .16s ease,filter .16s ease}
+.gamebtn:hover{color:#1A0E08;transform:translateY(-2px);box-shadow:0 14px 36px rgba(240,145,62,.34);filter:brightness(1.05)}
+.gamebtn:active{transform:none}
+.gb-apple{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:46px;height:46px;border-radius:50%;background:#0E1210}
+.gb-apple svg{display:block;width:31px;height:33px;transition:transform .25s ease}
+.gamebtn:hover .gb-apple svg{transform:rotate(-9deg)}
 .tf [hidden]{display:none}
 #formwrap{transition:opacity .45s ease,transform .45s ease}
 #formwrap.away{opacity:0;transform:translateY(-6px);pointer-events:none}
@@ -37,5 +45,5 @@
 .done .replay{display:inline-block;margin-top:14px;font-size:13px;color:var(--tx3)}
 .done:not([hidden]){animation:smf-in .55s ease-out both}
 @keyframes smf-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@media(max-width:760px){.alpha{padding:30px 22px 40px}.agrid{grid-template-columns:1fr;gap:18px}.stage{order:-1;height:230px}.tf h1{font-size:28px}.tf .need-h{font-size:17.5px}}
+@media(max-width:760px){.alpha{padding:30px 22px 40px}.agrid{grid-template-columns:1fr;gap:18px}.stage{order:-1;height:230px}.tf h1{font-size:28px}.tf .need-h{font-size:17.5px}.alpha .iosbox{grid-template-columns:1fr;margin-top:36px;padding:22px 20px}.gamebtn{justify-self:start;white-space:normal}}
 @media(prefers-reduced-motion:reduce){#formwrap,.done:not([hidden]){transition:none;animation:none}}
