@@ -1,7 +1,7 @@
 // Shared: i18n and language dropdown for the tester page. Closed testing is over: the page
 // thanks the testers and sends people to Google Play. It no longer talks to Supabase.
 const T={
-en:{/* owner will proofread */home:'About the app',contact:'Contact',title:'Testing is over',body:'Thank you to everyone who helped. SayMyFood is now available on Google Play.',play:'Open in Google Play'},
+en:{/* owner will proofread */home:'About the app',contact:'Contact',title:'Testing is over',body:'Thank you to everyone who helped. SayMyFood is now available on Google Play.',play:'Open on Google Play'},
 ru:{/* the owner's text */home:'О приложении',contact:'Связаться',title:'Тестирование завершено',body:'Спасибо всем, кто помогал. SayMyFood теперь доступен в Google Play.',play:'Открыть в Google Play'},
 pt:{/* owner will proofread */home:'Sobre o app',contact:'Contato',title:'O teste terminou',body:'Obrigado a todos que ajudaram. O SayMyFood agora está disponível no Google Play.',play:'Abrir no Google Play'},
 es:{/* owner will proofread */home:'Sobre la app',contact:'Contacto',title:'Las pruebas han terminado',body:'Gracias a todos los que ayudaron. SayMyFood ya está disponible en Google Play.',play:'Abrir en Google Play'}};
