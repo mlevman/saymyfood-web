@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SayMyFood — Closed test</title>
+<title>SayMyFood</title>
 <link rel="icon" href="../../brand/saymyfood-mark.png">
 <link rel="stylesheet" href="../../site.css?v=1">
 <link rel="stylesheet" href="shared.css?v=1">
@@ -43,26 +43,9 @@
 </div></header>
 <main class="alpha"><div class="agrid">
 <div class="tf">
-<div id="formwrap">
 <h1 id="t-title">…</h1>
-<p class="what" id="t-what"></p>
-<p class="more"><a href="../../index.html" id="t-more"></a></p>
-<p class="why" id="t-why"></p>
-<div class="need"><span class="need-ic" aria-hidden="true"><svg class="bar"><rect width="100%" height="100%" rx="1.5"></rect></svg><svg class="pt" viewBox="0 0 4 4"><circle cx="2" cy="2" r="2"></circle></svg></span><div><p class="need-h" id="t-need"></p><p class="need-p" id="t-needwhy"></p></div></div>
-<div class="field">
-<input type="email" id="email" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="email">
-<input class="hp" type="text" id="website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-</div>
-<button class="btn" id="send">…</button>
-<p class="msg" id="msg" role="status"></p>
-<div class="after"><p id="t-next"></p><p class="thanks" id="t-thanks"></p></div>
-<p class="fine" id="fine"></p>
-</div>
-<div class="done" id="done" hidden>
-<h2 id="d-title">…</h2>
-<p id="d-body"></p>
-<p class="fine" id="d-fine"></p>
-</div>
+<p class="what" id="t-body"></p>
+<a class="btn" id="t-play" href="https://play.google.com/store/apps/details?id=com.saymyfood.app">…</a>
 </div>
 <div class="stage" id="stage" aria-hidden="true"><canvas id="fx"></canvas><div class="pad"></div><div class="heat" id="heat"></div>
 <div class="rocket" id="rocket">
@@ -77,7 +60,7 @@
 <img class="rk-logo" src="../../brand/saymyfood-mark.png" alt="">
 </div></div>
 </div>
-<!-- the apple block: open by default here; shared.js closes it once a request is sent -->
+<!-- the apple block: open by default here -->
 <div class="apz open" id="apz">
 <div class="apz-row"><button class="apz-btn" type="button" aria-expanded="true" aria-controls="apz-body"><span class="apz-q"><span data-apz="iosQ"></span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span><span class="apz-apple" aria-hidden="true">
 <!-- the game's own apple (art.js apple(), r=10): whole, no bite -->
@@ -118,33 +101,23 @@
 </div></footer>
 <script>(()=>{
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const st=document.getElementById('stage'),cv=document.getElementById('fx'),x=cv.getContext('2d'),rk=document.getElementById('rocket'),heat=document.getElementById('heat');
-let W=0,H=0,dpr=1,P=[],last=performance.now(),acc=0,launch=null;
+const st=document.getElementById('stage'),cv=document.getElementById('fx'),x=cv.getContext('2d'),rk=document.getElementById('rocket');
+let W=0,H=0,dpr=1,P=[],last=performance.now(),acc=0;
 function size(){const r=st.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0)}
 size();addEventListener('resize',size);
 function nozzle(){const r=rk.getBoundingClientRect(),s=st.getBoundingClientRect();return{x:r.left-s.left+r.width/2,y:r.top-s.top+r.height*.88,w:r.width}}
 const warm=['#F0913E','#E3C34A','#F6B26B','#FFD98A'];
-function ember(n,o){const nz=nozzle();for(let i=0;i<n;i++){const a=(Math.random()-.5)*(o?1.6:.9),sp=o?(60+Math.random()*160):(14+Math.random()*26);
-P.push({x:nz.x+(Math.random()-.5)*nz.w*.3,y:nz.y,vx:Math.sin(a)*sp*(o?.35:1),vy:Math.cos(a)*sp,life:0,max:o?(.35+Math.random()*.5):(.6+Math.random()*.6),r:o?(1+Math.random()*1.8):(.8+Math.random()*.8),c:warm[Math.random()*4|0],al:o?.9:.55})}}
+function ember(){const nz=nozzle(),a=(Math.random()-.5)*.9,sp=14+Math.random()*26;
+P.push({x:nz.x+(Math.random()-.5)*nz.w*.3,y:nz.y,vx:Math.sin(a)*sp,vy:Math.cos(a)*sp,life:0,max:.6+Math.random()*.6,r:.8+Math.random()*.8,c:warm[Math.random()*4|0],al:.55})}
 function frame(t){const dt=Math.min(.05,(t-last)/1000);last=t;
 x.clearRect(0,0,W,H);
-if(!RM){acc+=dt;const rate=launch?0.006:0.22;while(acc>rate){acc-=rate;if(launch&&launch.t<1)ember(3,true);else if(!launch)ember(1,false)}}
+if(!RM){acc+=dt;while(acc>0.22){acc-=0.22;ember()}}
 for(let i=P.length-1;i>=0;i--){const p=P[i];p.life+=dt;if(p.life>p.max){P.splice(i,1);continue}
 p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=40*dt;p.vx*=.98;const k=1-p.life/p.max;
 x.globalAlpha=p.al*k;x.fillStyle=p.c;x.beginPath();x.arc(p.x,p.y,p.r*(0.6+0.4*k),0,7);x.fill()}
 x.globalAlpha=1;
-if(launch){const dur=1.25;launch.t=Math.min(1,(t-launch.t0)/1000/dur);const u=launch.t;
-const rise=H+220;
-const e=u<.2?Math.pow(u/.2,2)*.04:.04+.96*Math.pow((u-.2)/.8,2.5);
-rk.style.opacity=String(Math.max(0,Math.min(1,(1-u)*4)));
-rk.style.transform='translateY('+(-rise*e)+'px)';
-heat.style.opacity=String(Math.max(0,1-u*4));heat.style.animation='none';
-if(u>=1&&P.length===0){rk.style.opacity='0'}}
 requestAnimationFrame(frame)}
 requestAnimationFrame(frame);
-window.SMF_LAUNCH=function(){if(RM){rk.style.transition='opacity .4s';rk.style.opacity='0';return 500}
-if(navigator.vibrate)try{navigator.vibrate(12)}catch(e){}
-ember(70,true);launch={t0:performance.now(),t:0,vx:0};return 1400}
 })();</script>
 <script src="../../apple.js?v=1"></script>
 <script type="module" src="shared.js?v=1"></script>
